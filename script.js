@@ -17,47 +17,47 @@ const mallaCurricular = {
         ],
         "2 Semestre": [
             { codigo: "ANAV051", nombre: "ANATOMIA VETERINARIA", tipo: "obligatoria", abre: ["ANAV140"] },
-            { codigo: "ANAV131", nombre: "EMBRIOLOGIA VETERINARIA", tipo: "obligatoria", abre: ["CIAN161"], prerequisitosConjuntos: ["ANAV140"] }, // Abre junto a Morfología Aplicada
+            { codigo: "ANAV131", nombre: "EMBRIOLOGIA VETERINARIA", tipo: "obligatoria", prerequisitos: ["ANAV140"], abre: ["CIAN161"] }, // Abre junto a Morfología Aplicada
             { codigo: "ELECT13", nombre: "OFG 2", tipo: "electiva" },
             { codigo: "FARM101", nombre: "BIOQUIMICA VETERINARIA", tipo: "obligatoria", prerequisitos: ["BIMI030"], abre: ["BIMI165", "FARM151"] },
-            { codigo: "HIPA104", nombre: "HISTOLOGIA", tipo: "obligatoria", prerequisitos: ["BIMI030"], abre: ["PANI142"], prerequisitosConjuntos: ["FARM155"] }, // Junto a Inmunología
+            { codigo: "HIPA104", nombre: "HISTOLOGIA", tipo: "obligatoria", prerequisitos: ["BIMI030"], abre: ["PANI142"] }, // CORRECCIÓN: Solo requiere Biología Celular
             { codigo: "MVET053", nombre: "PRACTICA INTRODUCCION A LA MEDICINA VETERINARIA II", tipo: "practica", prerequisitos: ["MVET013"] }
         ]
     },
     "Segundo Año": {
         "3 Semestre": [
-            { codigo: "ANAV140", nombre: "MORFOLOGÍA VETERINARIA APLICADA", tipo: "obligatoria", prerequisitos: ["ANAV051"], abre: ["CIAN161"], prerequisitosConjuntos: ["ANAV131"] },
+            { codigo: "ANAV140", nombre: "MORFOLOGÍA VETERINARIA APLICADA", tipo: "obligatoria", prerequisitos: ["ANAV051", "ANAV131"], abre: ["CIAN161"] },
             { codigo: "BIMI165", nombre: "MICROBIOLOGÍA GENERAL", tipo: "obligatoria", prerequisitos: ["FARM101"], abre: ["MEPR235"] },
             { codigo: "CIAN141", nombre: "ZOOTECNIA", tipo: "obligatoria", prerequisitos: ["CIAN040"], abre: ["CIAN113", "CIAN243"] },
             { codigo: "FARM151", nombre: "FISIOLOGÍA VETERINARIA", tipo: "obligatoria", prerequisitos: ["FARM101"], abre: ["FARM202"] },
-            { codigo: "FARM155", nombre: "INMUNOLOGÍA", tipo: "obligatoria", prerequisitos: ["BIMI030"], abre: ["PANI142"], prerequisitosConjuntos: ["HIPA104"] },
-            { codigo: "MEPR132", nombre: "BIOESTADISTICA", tipo: "obligatoria", prerequisitos: ["MATM003"], abre: ["CIAN240"], prerequisitosConjuntos: ["CIAN249"] } // Abre junto a producción de no rumiantes para Genética Pecuaria
+            { codigo: "FARM155", nombre: "INMUNOLOGÍA", tipo: "obligatoria", prerequisitos: ["BIMI030"], abre: ["PANI142"] },
+            { codigo: "MEPR132", nombre: "BIOESTADISTICA", tipo: "obligatoria", prerequisitos: ["MATM003"], abre: ["CIAN240", "CIAN249"] } // Abre junto a producción de no rumiantes para Genética Pecuaria
         ],
         "4 Semestre": [
             { codigo: "CIAN113", nombre: "ETOLOGIA Y BIENESTAR ANIMAL", tipo: "obligatoria", prerequisitos: ["CIAN141"] },
             { codigo: "CIAN161", nombre: "FISIOLOGIA REPRODUCTIVA", tipo: "obligatoria", prerequisitos: ["ANAV131", "ANAV140"], abre: ["CIAN262", "CIAN233"] },
             { codigo: "CIDI023", nombre: "INGLES I", tipo: "obligatoria", abre: ["CIDI123"] },
-            { codigo: "FARM202", nombre: "FISIOPATOLOGÍA VETERINARIA", tipo: "obligatoria", prerequisitos: ["FARM151"], abre: ["FARM211", "PANI238", "HOVE272"], prerequisitosConjuntos: ["PANI142", "PANI239"] }, // Abre junto a patología general, patología especial e inmunopatología
+            { codigo: "FARM202", nombre: "FISIOPATOLOGÍA VETERINARIA", tipo: "obligatoria", prerequisitos: ["FARM151", "PANI142"], abre: ["FARM211", "PANI238", "HOVE272", "PANI239"] }, // Abre junto a patología general, patología especial e inmunopatología
             { codigo: "MEPR235", nombre: "ENFERMEDADES INFECCIOSAS DE LOS ANIMALES DOMÉSTICOS", tipo: "obligatoria", prerequisitos: ["BIMI165"] },
-            { codigo: "PANI142", nombre: "PATOLOGÍA GENERAL", tipo: "obligatoria", prerequisitos: ["HIPA104", "FARM155"], abre: ["PANI238", "PANI239"], prerequisitosConjuntos: ["FARM202"] } // Abre junto a fisiopatología veterinaria
+            { codigo: "PANI142", nombre: "PATOLOGÍA GENERAL", tipo: "obligatoria", prerequisitos: ["HIPA104", "FARM155"], abre: ["PANI238", "PANI239"] }
         ]
     },
     "Tercer Año": {
         "5 Semestre": [
-            { codigo: "CIAN243", nombre: "NUTRICIÓN Y ALIMENTACIÓN", tipo: "obligatoria", prerequisitos: ["CIAN141"], abre: ["CIAN249", "MEPR200", "CIAN246"], prerequisitosConjuntos: ["PANI239", "CIAN262"] },
-            { codigo: "CIAN262", nombre: "REPRODUCCION ANIMAL I", tipo: "obligatoria", prerequisitos: ["CIAN161"], abre: ["CIAN246"], prerequisitosConjuntos: ["CIAN243"] },
+            { codigo: "CIAN243", nombre: "NUTRICIÓN Y ALIMENTACIÓN", tipo: "obligatoria", prerequisitos: ["CIAN141", "PANI239", "CIAN262"], abre: ["CIAN249", "MEPR200", "CIAN246"] },
+            { codigo: "CIAN262", nombre: "REPRODUCCION ANIMAL I", tipo: "obligatoria", prerequisitos: ["CIAN161", "CIAN243"], abre: ["CIAN246"] },
             { codigo: "CIDI123", nombre: "INGLES II", tipo: "obligatoria", prerequisitos: ["CIDI023"], abre: ["CIDI223"] },
-            { codigo: "FARM211", nombre: "FARMACOLOGIA VETERINARIA", tipo: "obligatoria", prerequisitos: ["FARM202"], abre: ["HOVE215", "HOVE278"], prerequisitosConjuntos: ["PANI239"] },
-            { codigo: "MVET102", nombre: "PRÁCTICA BÁSICA", tipo: "practica", prerequisitos: ["TODOS-1-4-SEMESTRE"], abre: ["MEPR209"], prerequisitosConjuntos: ["PANI238", "MEPR200"] },
-            { codigo: "PANI238", nombre: "ENFERMEDADES PARASITARIAS", tipo: "obligatoria", prerequisitos: ["FARM202", "PANI142"], abre: ["PANI254", "MEPR209", "MEPR216"], prerequisitosConjuntos: ["MVET102", "MEPR200", "PANI239"] },
-            { codigo: "PANI239", nombre: "PATOLOGIA ESPECIAL E INMUNOPATOLOGIA", tipo: "obligatoria", prerequisitos: ["PANI142"], abre: ["MEPR200", "PANI254", "HOVE272", "HOVE278", "HOVE292", "MEPR216"], prerequisitosConjuntos: ["CIAN243", "FARM202", "FARM211", "PANI238", "MEPR200"] }
+            { codigo: "FARM211", nombre: "FARMACOLOGIA VETERINARIA", tipo: "obligatoria", prerequisitos: ["FARM202", "PANI239"], abre: ["HOVE215", "HOVE278"] },
+            { codigo: "MVET102", nombre: "PRÁCTICA BÁSICA", tipo: "practica", prerequisitos: ["TODOS-1-4-SEMESTRE", "PANI238", "MEPR200"], abre: ["MEPR209"] },
+            { codigo: "PANI238", nombre: "ENFERMEDADES PARASITARIAS", tipo: "obligatoria", prerequisitos: ["FARM202", "PANI142", "MVET102", "MEPR200", "PANI239"], abre: ["PANI254", "MEPR209", "MEPR216"] },
+            { codigo: "PANI239", nombre: "PATOLOGIA ESPECIAL E INMUNOPATOLOGIA", tipo: "obligatoria", prerequisitos: ["PANI142", "FARM202", "CIAN243", "FARM211", "PANI238", "MEPR200"], abre: ["MEPR200", "PANI254", "HOVE272", "HOVE278", "HOVE292", "MEPR216"] }
         ],
         "6 Semestre": [
             { codigo: "CIAN233", nombre: "REPRODUCCIÓN ANIMAL II", tipo: "obligatoria", prerequisitos: ["CIAN161"] },
-            { codigo: "CIAN240", nombre: "ECONOMIA Y FUNDAMENTOS DE ADMINISTRACION PECUARIA", tipo: "obligatoria", prerequisitos: ["MEPR132"], abre: ["CIAN248"], prerequisitosConjuntos: ["CIAN246"] },
-            { codigo: "CIAN249", nombre: "PRODUCCIÓN DE NO RUMIANTES", tipo: "obligatoria", prerequisitos: ["CIAN243"], abre: ["CIAN244", "CIAN235"], prerequisitosConjuntos: ["MEPR132", "CIAN246"] },
+            { codigo: "CIAN240", nombre: "ECONOMIA Y FUNDAMENTOS DE ADMINISTRACION PECUARIA", tipo: "obligatoria", prerequisitos: ["MEPR132", "CIAN246"], abre: ["CIAN248"] },
+            { codigo: "CIAN249", nombre: "PRODUCCIÓN DE NO RUMIANTES", tipo: "obligatoria", prerequisitos: ["CIAN243", "MEPR132", "CIAN246"], abre: ["CIAN244", "CIAN235"] },
             { codigo: "CIDI223", nombre: "INGLES III", tipo: "obligatoria", prerequisitos: ["CIDI123"] },
-            { codigo: "MEPR200", nombre: "EPIDEMIOLOGÍA VETERINARIA", tipo: "obligatoria", prerequisitos: ["CIAN243", "PANI239"], abre: ["MEPR209", "MEPR216"], prerequisitosConjuntos: ["PANI238", "MVET102"] },
+            { codigo: "MEPR200", nombre: "EPIDEMIOLOGÍA VETERINARIA", tipo: "obligatoria", prerequisitos: ["CIAN243", "PANI239", "PANI238", "MVET102"], abre: ["MEPR209", "MEPR216"] },
             { codigo: "PANI253", nombre: "ACUICULTURA Y ENFERMEDADES DE PECES", tipo: "obligatoria" },
             { codigo: "PANI254", nombre: "ENFERMEDADES DE AVES", tipo: "obligatoria", prerequisitos: ["PANI238", "PANI239"] }
         ]
@@ -65,20 +65,20 @@ const mallaCurricular = {
     "Cuarto Año": {
         "7 Semestre": [
             { codigo: "CIAN244", nombre: "GENETICA PECUARIA", tipo: "obligatoria", prerequisitos: ["MEPR132", "CIAN249"] },
-            { codigo: "CIAN246", nombre: "PRODUCCIÓN DE RUMIANTES I", tipo: "obligatoria", prerequisitos: ["CIAN243", "CIAN262"], abre: ["CIAN235", "CIAN248"], prerequisitosConjuntos: ["CIAN249", "CIAN240"] },
+            { codigo: "CIAN246", nombre: "PRODUCCIÓN DE RUMIANTES I", tipo: "obligatoria", prerequisitos: ["CIAN243", "CIAN262", "CIAN249", "CIAN240"], abre: ["CIAN235", "CIAN248"] },
             { codigo: "ELECT100", nombre: "OPTATIVO DE ESPECIALIZACIÓN I", tipo: "electiva", prerequisitos: ["TODOS-1-6-SEMESTRE"] },
-            { codigo: "HOVE215", nombre: "CIRUGÍA GENERAL Y ANESTESIOLOGÍA VETERINARIA", tipo: "obligatoria", prerequisitos: ["FARM211"], abre: ["HOVE293"], prerequisitosConjuntos: ["HOVE272"] },
-            { codigo: "HOVE272", nombre: "EXPLORACIÓN CLINICA", tipo: "obligatoria", prerequisitos: ["FARM202", "PANI239"], abre: ["HOVE279", "HOVE293"], prerequisitosConjuntos: ["HOVE215"] },
-            { codigo: "HOVE278", nombre: "MEDICINA INTERNA I", tipo: "obligatoria", prerequisitos: ["FARM211", "PANI239"], abre: ["HOVE294", "HOVE295", "HOVE296"], prerequisitosConjuntos: ["HOVE292", "HOVE279", "HOVE293"] },
+            { codigo: "HOVE215", nombre: "CIRUGÍA GENERAL Y ANESTESIOLOGÍA VETERINARIA", tipo: "obligatoria", prerequisitos: ["FARM211", "HOVE272"], abre: ["HOVE293"] },
+            { codigo: "HOVE272", nombre: "EXPLORACIÓN CLINICA", tipo: "obligatoria", prerequisitos: ["FARM202", "PANI239", "HOVE215"], abre: ["HOVE279", "HOVE293"] },
+            { codigo: "HOVE278", nombre: "MEDICINA INTERNA I", tipo: "obligatoria", prerequisitos: ["FARM211", "PANI239", "HOVE292", "HOVE279", "HOVE293"], abre: ["HOVE294", "HOVE295", "HOVE296"] },
             { codigo: "MEPR209", nombre: "PRÁCTICA TRANSFERENCIA TECNOLÓGICA Y SERVICIO VETERINARIO A LA SOCIEDAD", tipo: "practica", prerequisitos: ["MVET102", "PANI238", "MEPR200"] }
         ],
         "8 Semestre": [
-            { codigo: "CIAN235", nombre: "PRODUCTOS ANIMALES", tipo: "obligatoria", prerequisitos: ["CIAN249", "CIAN246"], abre: ["CIAN255"], prerequisitosConjuntos: ["CIAN248"] },
-            { codigo: "CIAN248", nombre: "PRODUCCIÓN DE RUMIANTES II", tipo: "obligatoria", prerequisitos: ["CIAN240", "CIAN246"], abre: ["CIAN255"], prerequisitosConjuntos: ["CIAN235"] },
+            { codigo: "CIAN235", nombre: "PRODUCTOS ANIMALES", tipo: "obligatoria", prerequisitos: ["CIAN249", "CIAN246", "CIAN248"], abre: ["CIAN255"] },
+            { codigo: "CIAN248", nombre: "PRODUCCIÓN DE RUMIANTES II", tipo: "obligatoria", prerequisitos: ["CIAN240", "CIAN246", "CIAN235"], abre: ["CIAN255"] },
             { codigo: "ELECT101", nombre: "OPTATIVO DE ESPECIALIZACIÓN II", tipo: "electiva", prerequisitos: ["TODOS-1-6-SEMESTRE"] },
-            { codigo: "HOVE279", nombre: "MÉTODOS COMPLEMENTARIOS DE DIAGNÓSTICO", tipo: "obligatoria", prerequisitos: ["HOVE272"], abre: ["HOVE294", "HOVE295", "HOVE296"], prerequisitosConjuntos: ["HOVE278", "HOVE292", "HOVE293"] },
-            { codigo: "HOVE292", nombre: "MEDICINA INTERNA II", tipo: "obligatoria", prerequisitos: ["PANI239"], abre: ["HOVE294", "HOVE295", "HOVE296"], prerequisitosConjuntos: ["HOVE278", "HOVE279", "HOVE293"] },
-            { codigo: "HOVE293", nombre: "PATOLOGÍA QUIRÚRGICA Y CIRUGÍA ESPECIAL", tipo: "obligatoria", prerequisitos: ["HOVE215", "HOVE272"], abre: ["HOVE294", "HOVE295", "HOVE296"], prerequisitosConjuntos: ["HOVE278", "HOVE292", "HOVE279"] },
+            { codigo: "HOVE279", nombre: "MÉTODOS COMPLEMENTARIOS DE DIAGNÓSTICO", tipo: "obligatoria", prerequisitos: ["HOVE272", "HOVE278", "HOVE292", "HOVE293"], abre: ["HOVE294", "HOVE295", "HOVE296"] },
+            { codigo: "HOVE292", nombre: "MEDICINA INTERNA II", tipo: "obligatoria", prerequisitos: ["PANI239", "HOVE278", "HOVE279", "HOVE293"], abre: ["HOVE294", "HOVE295", "HOVE296"] },
+            { codigo: "HOVE293", nombre: "PATOLOGÍA QUIRÚRGICA Y CIRUGÍA ESPECIAL", tipo: "obligatoria", prerequisitos: ["HOVE215", "HOVE272", "HOVE278", "HOVE292", "HOVE279"], abre: ["HOVE294", "HOVE295", "HOVE296"] },
             { codigo: "MEPR216", nombre: "CONTROL SANITARIO E INOCUIDAD DE ALIMENTOS", tipo: "obligatoria", prerequisitos: ["PANI238", "MEPR200", "PANI239"], abre: ["MEPR210", "MVET207"] }
         ]
     },
@@ -86,9 +86,9 @@ const mallaCurricular = {
         "9 Semestre": [
             { codigo: "CIAN255", nombre: "FORMULACIÓN Y EVALUACIÓN DE PROYECTOS", tipo: "obligatoria", prerequisitos: ["CIAN235", "CIAN248"] },
             { codigo: "ELECT112", nombre: "OPTATIVO DE PROFUNDIZACIÓN I", tipo: "electiva", prerequisitos: ["TODOS-1-8-SEMESTRE"] },
-            { codigo: "HOVE294", nombre: "CLÍNICA DE RUMIANTES", tipo: "obligatoria", prerequisitos: ["HOVE278", "HOVE292", "HOVE279", "HOVE293"], abre: ["HOVE297"], prerequisitosConjuntos: ["HOVE295", "HOVE296"] },
-            { codigo: "HOVE295", nombre: "CLÍNICA DE EQUINOS", tipo: "obligatoria", prerequisitos: ["HOVE278", "HOVE292", "HOVE279", "HOVE293"], abre: ["HOVE297"], prerequisitosConjuntos: ["HOVE294", "HOVE296"] },
-            { codigo: "HOVE296", nombre: "CLÍNICA DE PEQUEÑOS ANIMALES", tipo: "obligatoria", prerequisitos: ["HOVE278", "HOVE292", "HOVE279", "HOVE293"], abre: ["HOVE297"], prerequisitosConjuntos: ["HOVE294", "HOVE295"] },
+            { codigo: "HOVE294", nombre: "CLÍNICA DE RUMIANTES", tipo: "obligatoria", prerequisitos: ["HOVE278", "HOVE292", "HOVE279", "HOVE293", "HOVE295", "HOVE296"], abre: ["HOVE297"] },
+            { codigo: "HOVE295", nombre: "CLÍNICA DE EQUINOS", tipo: "obligatoria", prerequisitos: ["HOVE278", "HOVE292", "HOVE279", "HOVE293", "HOVE294", "HOVE296"], abre: ["HOVE297"] },
+            { codigo: "HOVE296", nombre: "CLÍNICA DE PEQUEÑOS ANIMALES", tipo: "obligatoria", prerequisitos: ["HOVE278", "HOVE292", "HOVE279", "HOVE293", "HOVE294", "HOVE295"], abre: ["HOVE297"] },
             { codigo: "MEPR210", nombre: "SALUD PÚBLICA VETERINARIA", tipo: "obligatoria", prerequisitos: ["MEPR216"] }
         ],
         "10 Semestre": [
@@ -151,13 +151,23 @@ function prerrequisitosCumplidos(asignatura) {
     const tienePrerequisitosBasicos = asignatura.prerequisitos && asignatura.prerequisitos.length > 0;
     const tienePrerequisitosConjuntos = asignatura.prerequisitosConjuntos && asignatura.prerequisitosConjuntos.length > 0;
 
-    if (!tienePrerequisitosBasicos && !tienePrerequisitosConjuntos) {
-        console.log(`Asignatura ${asignatura.codigo} no tiene prerequisitos explícitos, por lo tanto, está desbloqueada.`);
-        return true;
+    // Si tiene prerequisitosConjuntos, esos deben evaluarse primero y ser true
+    if (tienePrerequisitosConjuntos) {
+        // En este diseño, prerequisitosConjuntos significa que todos los de ese array deben estar aprobados.
+        // Se puede fusionar con la lógica de prerequisitos básicos si queremos una lógica más simple
+        // donde todos los elementos listados en `prerequisitos` son un "AND" lógico.
+        // Por ahora, asumimos que `prerequisitos` es el AND de sus elementos.
+        // Si hay `prerequisitosConjuntos`, los fusionamos en `prerequisitos` para una única lista AND.
+        if (!tienePrerequisitosBasicos) {
+            asignatura.prerequisitos = []; // Inicializar si no existe
+        }
+        asignatura.prerequisitos.push(...asignatura.prerequisitosConjuntos);
+        asignatura.prerequisitosConjuntos = []; // Vaciar después de fusionar
     }
 
+
     let todosBasicosCumplidos = true;
-    if (tienePrerequisitosBasicos) {
+    if (tienePrerequisitosBasicos) { // Re-evaluar `tienePrerequisitosBasicos` después de posible fusión
         for (const prereq of asignatura.prerequisitos) {
             if (prereq.startsWith("TODOS-")) {
                 const parts = prereq.split('-'); // ["TODOS", "1", "4", "SEMESTRE"]
@@ -181,7 +191,7 @@ function prerrequisitosCumplidos(asignatura) {
                     if (!allSemestersCovered) break; // Salir del loop de años
                 }
                 if (!allSemestersCovered) {
-                    console.log(`Prerequisito 'TODOS-${startSemestreNum}-${endSemestreNum}-SEMESTRE' para ${asignatura.codigo} NO CUMPLIDO.`);
+                    // console.log(`Prerequisito 'TODOS-${startSemestreNum}-${endSemestreNum}-SEMESTRE' para ${asignatura.codigo} NO CUMPLIDO.`);
                     todosBasicosCumplidos = false;
                     break;
                 }
@@ -195,14 +205,14 @@ function prerrequisitosCumplidos(asignatura) {
                      }
                  }
                  if (!allOthersCovered) {
-                    console.log(`Prerequisito 'TODAS-DEMAS' para ${asignatura.codigo} NO CUMPLIDO.`);
+                    // console.log(`Prerequisito 'TODAS-DEMAS' para ${asignatura.codigo} NO CUMPLIDO.`);
                     todosBasicosCumplidos = false;
                     break;
                  }
             } else {
                 // Requisito normal: debe estar aprobado
                 if (!estaAprobada(prereq)) {
-                    console.log(`Prerequisito normal ${prereq} para ${asignatura.codigo} NO CUMPLIDO.`);
+                    // console.log(`Prerequisito normal ${prereq} para ${asignatura.codigo} NO CUMPLIDO.`);
                     todosBasicosCumplidos = false;
                     break;
                 }
@@ -210,23 +220,12 @@ function prerrequisitosCumplidos(asignatura) {
         }
     }
 
-    let todosConjuntosCumplidos = true;
-    if (tienePrerequisitosConjuntos) {
-        for (const prereq of asignatura.prerequisitosConjuntos) {
-            if (!estaAprobada(prereq)) {
-                console.log(`Prerequisito conjunto ${prereq} para ${asignatura.codigo} NO CUMPLIDO.`);
-                todosConjuntosCumplidos = false;
-                break;
-            }
-        }
-    }
-
-    const cumple = todosBasicosCumplidos && todosConjuntosCumplidos;
-    if (cumple) {
-        console.log(`Asignatura ${asignatura.codigo} CUMPLE todos sus prerequisitos.`);
-    } else {
-        console.log(`Asignatura ${asignatura.codigo} NO CUMPLE todos sus prerequisitos.`);
-    }
+    const cumple = todosBasicosCumplidos; // `todosConjuntosCumplidos` ya fue absorbido
+    // if (cumple) {
+    //     console.log(`Asignatura ${asignatura.codigo} CUMPLE todos sus prerequisitos.`);
+    // } else {
+    //     console.log(`Asignatura ${asignatura.codigo} NO CUMPLE todos sus prerequisitos.`);
+    // }
     return cumple;
 }
 
@@ -266,22 +265,32 @@ function renderizarMalla() {
                 // Verificar y aplicar estado "aprobada"
                 if (estaAprobada(asignatura.codigo)) {
                     asignaturaDiv.classList.add('aprobada');
-                    console.log(`Asignatura ${asignatura.codigo} marcada como aprobada.`);
+                    // console.log(`Asignatura ${asignatura.codigo} marcada como aprobada.`);
                 } else {
                     // Verificar y aplicar estado "desbloqueado" si no está aprobada
                     if (prerrequisitosCumplidos(asignatura)) {
                         asignaturaDiv.classList.add('desbloqueado');
-                        console.log(`Asignatura ${asignatura.codigo} marcada como desbloqueada y clickeable.`);
-                        
-                        // Solo si está desbloqueada y NO aprobada, es clickeable para marcar como aprobada
-                        asignaturaDiv.addEventListener('click', () => {
-                            console.log(`Clic en asignatura desbloqueada: ${asignatura.codigo}`);
-                            marcarComoAprobada(asignatura.codigo);
-                        });
+                        // console.log(`Asignatura ${asignatura.codigo} marcada como desbloqueada.`);
                     } else {
-                        console.log(`Asignatura ${asignatura.codigo} bloqueada (prerequisitos pendientes).`);
+                        // console.log(`Asignatura ${asignatura.codigo} bloqueada (prerequisitos pendientes).`);
                     }
                 }
+                
+                // Añadir el event listener para permitir marcar/desmarcar
+                asignaturaDiv.addEventListener('click', () => {
+                    const clickedAsignatura = todasLasAsignaturasMap.get(asignaturaDiv.dataset.codigo);
+                    if (!clickedAsignatura) return;
+
+                    if (estaAprobada(clickedAsignatura.codigo)) {
+                        console.log(`Clic en asignatura aprobada: ${clickedAsignatura.codigo} -> Desmarcando.`);
+                        desmarcarAsignatura(clickedAsignatura.codigo);
+                    } else if (prerrequisitosCumplidos(clickedAsignatura)) {
+                        console.log(`Clic en asignatura desbloqueada: ${clickedAsignatura.codigo} -> Marcando como aprobada.`);
+                        marcarComoAprobada(clickedAsignatura.codigo);
+                    } else {
+                        console.log(`Asignatura ${clickedAsignatura.codigo} está bloqueada. No se puede clickear.`);
+                    }
+                });
                 
                 semestreDiv.appendChild(asignaturaDiv);
             });
@@ -304,7 +313,7 @@ function marcarComoAprobada(codigoAsignatura) {
     }
 }
 
-// Función para desmarcar una asignatura (útil para depuración o si un usuario se equivoca)
+// Función para desmarcar una asignatura
 function desmarcarAsignatura(codigoAsignatura) {
     if (estaAprobada(codigoAsignatura)) {
         console.log(`Desmarcando ${codigoAsignatura}...`);
