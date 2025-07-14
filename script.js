@@ -111,6 +111,7 @@ let semestreIndexMap = new Map(); // Para mapear semestre a su índice global (1
 
 // Función para inicializar el mapa de asignaturas y el índice de semestres
 function inicializarAsignaturasYSemestres() {
+    console.log("Inicializando asignaturas y semestres...");
     let globalSemestreCount = 0;
     for (const yearKey in mallaCurricular) {
         for (const semestreKey in mallaCurricular[yearKey]) {
@@ -122,6 +123,8 @@ function inicializarAsignaturasYSemestres() {
             });
         }
     }
+    console.log("Inicialización completa. Total de asignaturas:", todasLasAsignaturasMap.size);
+    console.log("Mapa de semestres:", semestreIndexMap);
 }
 
 // Función para obtener una asignatura por su código
@@ -141,8 +144,15 @@ function prerrequisitosCumplidos(asignatura) {
         return true;
     }
 
-    // Manejo de requisitos específicos "TODOS-X-Y-SEMESTRE"
-    if (asignatura.prerequisitos) {
+    // *** PRIMER PUNTO CLAVE: ASIGNATURAS SIN PRERREQUISITOS EXPLÍCITOS ***
+    // Si no tiene 'prerequisitos' ni 'prerequisitosConjuntos' definidos, se considera desbloqueada por defecto.
+    if (!asignatura.prerequisitos && !asignatura.prerequisitosConjuntos) {
+        // console.log(`Asignatura ${asignatura.codigo} no tiene prerequisitos explícitos, por lo tanto, está desbloqueada.`);
+        return true;
+    }
+
+    let todosBasicosCumplidos = true;
+    if (asignatura.prerequisitos && asignatura.prerequisitos.length > 0) {
         for (const prereq of asignatura.prerequisitos) {
             if (prereq.startsWith("TODOS-")) {
                 const parts = prereq.split('-'); // ["TODOS", "1", "4", "SEMESTRE"]
@@ -165,141 +175,66 @@ function prerrequisitosCumplidos(asignatura) {
                     }
                     if (!allSemestersCovered) break; // Salir del loop de años
                 }
-                if (!allSemestersCovered) return false;
+                if (!allSemestersCovered) {
+                    // console.log(`Prerequisito 'TODOS-${startSemestreNum}-${endSemestreNum}-SEMESTRE' para ${asignatura.codigo} NO CUMPLIDO.`);
+                    todosBasicosCumplidos = false;
+                    break;
+                }
             } else if (prereq === "TODAS-DEMAS-1-10-SEMESTRE") {
                  let allOthersCovered = true;
                  for(const otherCodigo of todosLosCodigosDeAsignaturas) {
-                     // Excluir la asignatura actual y otras asignaturas especiales (e.g. proyecto de título si aplica)
                      if (otherCodigo !== asignatura.codigo && !estaAprobada(otherCodigo)) {
                          allOthersCovered = false;
                          break;
                      }
                  }
-                 if (!allOthersCovered) return false;
-
+                 if (!allOthersCovered) {
+                    // console.log(`Prerequisito 'TODAS-DEMAS' para ${asignatura.codigo} NO CUMPLIDO.`);
+                    todosBasicosCumplidos = false;
+                    break;
+                 }
             } else {
                 // Requisito normal: debe estar aprobado
                 if (!estaAprobada(prereq)) {
-                    return false;
+                    // console.log(`Prerequisito normal ${prereq} para ${asignatura.codigo} NO CUMPLIDO.`);
+                    todosBasicosCumplidos = false;
+                    break;
                 }
             }
         }
     }
 
-    // Manejo de requisitos conjuntos
-    if (asignatura.prerequisitosConjuntos) {
+    let todosConjuntosCumplidos = true;
+    if (asignatura.prerequisitosConjuntos && asignatura.prerequisitosConjuntos.length > 0) {
         for (const prereq of asignatura.prerequisitosConjuntos) {
             if (!estaAprobada(prereq)) {
-                return false;
+                // console.log(`Prerequisito conjunto ${prereq} para ${asignatura.codigo} NO CUMPLIDO.`);
+                todosConjuntosCumplidos = false;
+                break;
             }
         }
     }
 
-    return true; // Todos los prerequisitos (normales y conjuntos) están cumplidos
+    const cumple = todosBasicosCumplidos && todosConjuntosCumplidos;
+    // if (cumple) {
+    //     console.log(`Asignatura ${asignatura.codigo} CUMPLE todos sus prerequisitos.`);
+    // } else {
+    //     console.log(`Asignatura ${asignatura.codigo} NO CUMPLE todos sus prerequisitos.`);
+    // }
+    return cumple;
 }
 
 
 // Función para renderizar la malla y actualizar estados
 function renderizarMalla() {
+    console.log("Iniciando renderización de la malla...");
     const mallaContainer = document.getElementById('malla');
     mallaContainer.innerHTML = ''; // Limpiar el contenedor antes de renderizar
 
-    let semestreCounter = 0; // Para el número de semestre global
-
     for (const year in mallaCurricular) {
         for (const semestreKey in mallaCurricular[year]) {
-            semestreCounter++;
             // Crear el div para el semestre
             const semestreDiv = document.createElement('div');
             semestreDiv.classList.add('semestre');
 
-            // Crear el título del semestre (ej. "1 Semestre", "2 Semestre")
-            const semestreTitulo = document.createElement('h3');
-            // Usar solo el número del semestre
-            semestreTitulo.textContent = `${semestreKey.split(' ')[0]} Semestre`; // Toma "1" de "1 Semestre"
-            semestreDiv.appendChild(semestreTitulo);
-
-            // Añadir asignaturas a este semestre
-            mallaCurricular[year][semestreKey].forEach(asignatura => {
-                const asignaturaDiv = document.createElement('div');
-                asignaturaDiv.classList.add('asignatura');
-                asignaturaDiv.classList.add(`tipo-${asignatura.tipo}`); // Aplica la clase de tipo
-                asignaturaDiv.dataset.codigo = asignatura.codigo; // Guardar el código para referencia
-                asignaturaDiv.textContent = asignatura.nombre;
-
-                // Verificar y aplicar estado "aprobada"
-                if (estaAprobada(asignatura.codigo)) {
-                    asignaturaDiv.classList.add('aprobada');
-                } else {
-                    // Verificar y aplicar estado "desbloqueado" si no está aprobada
-                    if (prerrequisitosCumplidos(asignatura)) {
-                        asignaturaDiv.classList.add('desbloqueado');
-                        // Solo si está desbloqueada y NO aprobada, es clickeable para marcar como aprobada
-                        asignaturaDiv.addEventListener('click', () => {
-                            marcarComoAprobada(asignatura.codigo);
-                        });
-                    }
-                }
-                
-                semestreDiv.appendChild(asignaturaDiv);
-            });
-            mallaContainer.appendChild(semestreDiv);
-        }
-    }
-}
-
-// Función para marcar una asignatura como aprobada
-function marcarComoAprobada(codigoAsignatura) {
-    if (!estaAprobada(codigoAsignatura)) { // Solo si no ha sido aprobada ya
-        asignaturasAprobadas[codigoAsignatura] = true;
-        localStorage.setItem('asignaturasAprobadas', JSON.stringify(asignaturasAprobadas));
-        // Después de marcar una asignatura como aprobada, volvemos a renderizar
-        // para que los estados de otras asignaturas se actualicen (desbloqueos, etc.).
-        renderizarMalla();
-    }
-}
-
-// Función para desmarcar una asignatura (útil para depuración o si un usuario se equivoca)
-function desmarcarAsignatura(codigoAsignatura) {
-    if (estaAprobada(codigoAsignatura)) {
-        delete asignaturasAprobadas[codigoAsignatura];
-        localStorage.setItem('asignaturasAprobadas', JSON.stringify(asignaturasAprobadas));
-        renderizarMalla();
-    }
-}
-
-
-// --- Lógica de inicialización ---
-document.addEventListener('DOMContentLoaded', () => {
-    // Cargar asignaturas aprobadas al inicio (si hay)
-    const savedAprobadas = localStorage.getItem('asignaturasAprobadas');
-    if (savedAprobadas) {
-        try {
-            Object.assign(asignaturasAprobadas, JSON.parse(savedAprobadas));
-        } catch (e) {
-            console.error("Error al cargar asignaturas aprobadas de localStorage:", e);
-            // Si hay un error, limpiar el localStorage para evitar bucles
-            localStorage.removeItem('asignaturasAprobadas');
-        }
-    }
-    
-    inicializarAsignaturasYSemestres(); // Llenar los mapas antes de renderizar
-    renderizarMalla();
-});
-
-
-// Opcional: Funcionalidad para resetear el progreso (para pruebas)
-// Agrega un botón en tu HTML: <button onclick="resetearProgreso()">Resetear Progreso</button>
-function resetearProgreso() {
-    if (confirm("¿Estás seguro de que quieres resetear todo tu progreso?")) {
-        localStorage.removeItem('asignaturasAprobadas');
-        // Limpiar el objeto en memoria también
-        for (const key in asignaturasAprobadas) {
-            if (asignaturasAprobadas.hasOwnProperty(key)) {
-                delete asignaturasAprobadas[key];
-            }
-        }
-        renderizarMalla();
-        alert("Progreso reseteado.");
-    }
-}
+            // Crear el título del semestre
