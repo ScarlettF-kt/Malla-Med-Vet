@@ -50,10 +50,13 @@ h2 {
 /* Contenedor principal de la malla */
 #malla {
     display: flex;
-    flex-wrap: wrap; /* Permite que los elementos salten de línea */
-    justify-content: center; /* Centra los semestres horizontalmente */
+    flex-wrap: nowrap; /* Desactiva el salto de línea para forzar el scroll horizontal */
+    justify-content: flex-start; /* Alinea los elementos al inicio */
     gap: 1cm; /* Espaciado entre semestres */
     padding: 10px;
+    overflow-x: auto; /* ¡Permite el desplazamiento horizontal si el contenido desborda! */
+    -webkit-overflow-scrolling: touch; /* Mejora el desplazamiento en dispositivos iOS */
+    white-space: nowrap; /* Evita que los divs de semestre salten de línea */
 }
 
 /* Estilo para cada semestre */
@@ -68,9 +71,12 @@ h2 {
 
     /* Ancho máximo de 10cm, con flexibilidad */
     max-width: 10cm;
-    flex: 1 1 calc(10cm - 1cm); /* Flex-grow, flex-shrink, flex-basis */
-    min-width: 250px; /* Ancho mínimo para que no se vea muy comprimido en pantallas pequeñas */
+    min-width: 10cm; /* Asegura que cada semestre ocupe al menos 10cm */
+    flex-shrink: 0; /* Evita que los semestres se encojan si hay poco espacio */
+    flex-grow: 0; /* Evita que los semestres crezcan */
     box-shadow: 0 4px 8px var(--color-sombra); /* Sombra suave */
+    
+    white-space: normal; /* Permite que el contenido interno del semestre salte de línea */
 }
 
 /* Título de cada semestre */
@@ -105,6 +111,7 @@ h2 {
     font-size: 0.95em;
     font-weight: bold;
     box-sizing: border-box; /* Incluye padding en el tamaño */
+    white-space: normal; /* Permite que el texto de la asignatura salte de línea */
 }
 
 /* Variaciones de color para asignaturas según el tipo (cuando estén desbloqueadas) */
@@ -150,15 +157,17 @@ footer {
 
 /* Media Queries para Responsividad en Móviles */
 @media (max-width: 768px) {
+    /* Aquí la malla ya no se apila verticalmente, sino que se mantiene horizontalmente desplazable */
     #malla {
-        flex-direction: column; /* Apila los semestres verticalmente en pantallas pequeñas */
-        align-items: center; /* Centra los semestres apilados */
+        flex-wrap: nowrap; /* Asegura que no salte de línea en pantallas pequeñas */
+        justify-content: flex-start;
     }
 
     .semestre {
-        min-width: unset; /* Quita el min-width para mayor flexibilidad */
-        width: 90%; /* Ocupa casi todo el ancho disponible */
-        max-width: 300px; /* Limita un poco el ancho en pantallas intermedias */
+        /* Mantiene el ancho fijo para permitir el scroll */
+        min-width: 10cm; /* Asegura el ancho mínimo de 10cm */
+        max-width: 10cm; /* Mantiene el ancho máximo de 10cm */
+        width: 10cm; /* Fija el ancho a 10cm */
     }
 
     h1 {
@@ -173,14 +182,5 @@ footer {
         font-size: 0.9em;
     }
 }
-
-@media (max-width: 480px) {
-    body {
-        padding: 10px;
-    }
-
-    .semestre {
-        width: 100%; /* Ocupa todo el ancho en móviles muy pequeños */
-        max-width: 280px; /* Asegura que no sea excesivamente ancho en landscape */
-    }
-}
+/* No necesitamos un media query específico para 480px para el scroll horizontal,
+   ya que el comportamiento de overflow-x ya lo maneja bien. */
