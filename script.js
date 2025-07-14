@@ -101,108 +101,33 @@ const mallaCurricular = {
     }
 };
 
-// Objeto para llevar el registro de asignaturas aprobadas (para futura interactividad)
-const asignaturasAprobadas = {}; // Puedes cargar esto desde localStorage o una base de datos
+// Objeto para llevar el registro de asignaturas aprobadas (se carga desde localStorage)
+const asignaturasAprobadas = {};
+
+// Mapa para acceder rápidamente a la información de todas las asignaturas por su código
+const todasLasAsignaturasMap = new Map();
+let todosLosCodigosDeAsignaturas = []; // Para los requisitos "TODOS-X-SEMESTRE"
+let semestreIndexMap = new Map(); // Para mapear semestre a su índice global (1, 2, 3...)
+
+// Función para inicializar el mapa de asignaturas y el índice de semestres
+function inicializarAsignaturasYSemestres() {
+    let globalSemestreCount = 0;
+    for (const yearKey in mallaCurricular) {
+        for (const semestreKey in mallaCurricular[yearKey]) {
+            globalSemestreCount++;
+            semestreIndexMap.set(semestreKey, globalSemestreCount); // Mapea "1 Semestre" -> 1, "2 Semestre" -> 2
+            mallaCurricular[yearKey][semestreKey].forEach(asignatura => {
+                todasLasAsignaturasMap.set(asignatura.codigo, asignatura);
+                todosLosCodigosDeAsignaturas.push(asignatura.codigo);
+            });
+        }
+    }
+}
 
 // Función para obtener una asignatura por su código
 const getAsignaturaByCodigo = (codigo) => {
-    for (const yearKey in mallaCurricular) {
-        for (const semestreKey in mallaCurricular[yearKey]) {
-            const asignatura = mallaCurricular[yearKey][semestreKey].find(
-                (a) => a.codigo === codigo
-            );
-            if (asignatura) return asignatura;
-        }
-    }
-    return null;
+    return todasLasAsignaturasMap.get(codigo);
 };
-
-// Función para renderizar la malla
-function renderizarMalla() {
-    const mallaContainer = document.getElementById('malla');
-    mallaContainer.innerHTML = ''; // Limpiar el contenedor antes de renderizar
-
-    for (const year in mallaCurricular) {
-        for (const semestre in mallaCurricular[year]) {
-            // Crear el div para el semestre
-            const semestreDiv = document.createElement('div');
-            semestreDiv.classList.add('semestre');
-
-            // Crear el título del semestre
-            const semestreTitulo = document.createElement('h3');
-            semestreTitulo.textContent = `${year} - ${semestre}`;
-            semestreDiv.appendChild(semestreTitulo);
-
-            // Añadir asignaturas a este semestre
-            mallaCurricular[year][semestre].forEach(asignatura => {
-                const asignaturaDiv = document.createElement('div');
-                asignaturaDiv.classList.add('asignatura');
-                // Añadir clases de tipo para el CSS
-                asignaturaDiv.classList.add(`tipo-${asignatura.tipo}`);
-                asignaturaDiv.dataset.codigo = asignatura.codigo; // Guardar el código para referencia
-                asignaturaDiv.textContent = asignatura.nombre;
-
-                // Añadir evento click para futura funcionalidad
-                asignaturaDiv.addEventListener('click', () => {
-                    mostrarDetallesAsignatura(asignatura);
-                });
-
-                // Ejemplo: resaltar si está aprobada (futura funcionalidad)
-                if (asignaturasAprobadas[asignatura.codigo]) {
-                    asignaturaDiv.classList.add('aprobada'); // Necesitarías un estilo para .aprobada
-                }
-
-                semestreDiv.appendChild(asignaturaDiv);
-            });
-            mallaContainer.appendChild(semestreDiv);
-        }
-    }
-}
-
-// Función para mostrar detalles de la asignatura (ejemplo)
-function mostrarDetallesAsignatura(asignatura) {
-    let mensaje = `**${asignatura.nombre}** (${asignatura.codigo})\n`;
-    mensaje += `Tipo: ${asignatura.tipo}\n`;
-
-    if (asignatura.prerequisitos && asignatura.prerequisitos.length > 0) {
-        const prereqNombres = asignatura.prerequisitos.map(p => {
-            const prereqObj = getAsignaturaByCodigo(p);
-            return prereqObj ? prereqObj.nombre : p;
-        });
-        mensaje += `Prerequisitos: ${prereqNombres.join(', ')}\n`;
-    }
-
-    if (asignatura.prerequisitosConjuntos && asignatura.prerequisitosConjuntos.length > 0) {
-        const prereqConjNombres = asignatura.prerequisitosConjuntos.map(p => {
-            const prereqObj = getAsignaturaByCodigo(p);
-            return prereqObj ? prereqObj.nombre : p;
-        });
-        mensaje += `Prerequisitos (junto a): ${prereqConjNombres.join(', ')}\n`;
-    }
-
-    if (asignatura.abre && asignatura.abre.length > 0) {
-        const abreNombres = asignatura.abre.map(a => {
-            const abreObj = getAsignaturaByCodigo(a);
-            return abreObj ? abreObj.nombre : a;
-        });
-        mensaje += `Habilita: ${abreNombres.join(', ')}\n`;
-    }
-
-    alert(mensaje); // Puedes reemplazar esto con un modal más elegante
-}
-
-// Iniciar la renderización cuando el DOM esté completamente cargado
-document.addEventListener('DOMContentLoaded', renderizarMalla);
-
-// --- Funcionalidades Adicionales (para el futuro) ---
-
-// Función para marcar una asignatura como aprobada
-function marcarComoAprobada(codigoAsignatura) {
-    asignaturasAprobadas[codigoAsignatura] = true;
-    // Guardar en localStorage para persistencia
-    localStorage.setItem('asignaturasAprobadas', JSON.stringify(asignaturasAprobadas));
-    renderizarMalla(); // Volver a renderizar para aplicar el estilo "aprobada"
-}
 
 // Función para verificar si una asignatura está aprobada
 function estaAprobada(codigoAsignatura) {
@@ -211,45 +136,170 @@ function estaAprobada(codigoAsignatura) {
 
 // Función para verificar si los prerrequisitos de una asignatura están cumplidos
 function prerrequisitosCumplidos(asignatura) {
-    if (!asignatura.prerequisitos && !asignatura.prerequisitosConjuntos) {
-        return true; // No tiene prerequisitos
+    // Si la asignatura ya está aprobada, sus prerrequisitos se consideran cumplidos para efectos de habilitación
+    if (estaAprobada(asignatura.codigo)) {
+        return true;
     }
 
-    let todosBasicosCumplidos = true;
+    // Manejo de requisitos específicos "TODOS-X-Y-SEMESTRE"
     if (asignatura.prerequisitos) {
-        todosBasicosCumplidos = asignatura.prerequisitos.every(prereq => estaAprobada(prereq));
+        for (const prereq of asignatura.prerequisitos) {
+            if (prereq.startsWith("TODOS-")) {
+                const parts = prereq.split('-'); // ["TODOS", "1", "4", "SEMESTRE"]
+                const startSemestreNum = parseInt(parts[1]);
+                const endSemestreNum = parseInt(parts[2]);
+
+                let allSemestersCovered = true;
+                for (const yearKey in mallaCurricular) {
+                    for (const semestreKey in mallaCurricular[yearKey]) {
+                        const currentSemestreNum = semestreIndexMap.get(semestreKey);
+                        if (currentSemestreNum >= startSemestreNum && currentSemestreNum <= endSemestreNum) {
+                            for (const s of mallaCurricular[yearKey][semestreKey]) {
+                                if (!estaAprobada(s.codigo)) {
+                                    allSemestersCovered = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!allSemestersCovered) break; // Salir del loop de semestres
+                    }
+                    if (!allSemestersCovered) break; // Salir del loop de años
+                }
+                if (!allSemestersCovered) return false;
+            } else if (prereq === "TODAS-DEMAS-1-10-SEMESTRE") {
+                 let allOthersCovered = true;
+                 for(const otherCodigo of todosLosCodigosDeAsignaturas) {
+                     // Excluir la asignatura actual y otras asignaturas especiales (e.g. proyecto de título si aplica)
+                     if (otherCodigo !== asignatura.codigo && !estaAprobada(otherCodigo)) {
+                         allOthersCovered = false;
+                         break;
+                     }
+                 }
+                 if (!allOthersCovered) return false;
+
+            } else {
+                // Requisito normal: debe estar aprobado
+                if (!estaAprobada(prereq)) {
+                    return false;
+                }
+            }
+        }
     }
 
-    let todosConjuntosCumplidos = true;
+    // Manejo de requisitos conjuntos
     if (asignatura.prerequisitosConjuntos) {
-        todosConjuntosCumplidos = asignatura.prerequisitosConjuntos.every(prereq => estaAprobada(prereq));
+        for (const prereq of asignatura.prerequisitosConjuntos) {
+            if (!estaAprobada(prereq)) {
+                return false;
+            }
+        }
     }
 
-    // Casos especiales para "TODOS-X-Y-SEMESTRE"
-    if (asignatura.prerequisitos && asignatura.prerequisitos.includes("TODOS-1-4-SEMESTRE")) {
-        // Aquí necesitarías una lógica para revisar *todas* las asignaturas de esos semestres
-        // Por simplicidad, esto sería más complejo de implementar directamente sin un mapeo completo de todos los códigos de asignaturas.
-        // Por ahora, asumimos que se cumple.
-        // En una implementación real, se iteraría sobre `mallaCurricular` para obtener todos los códigos de asignatura en ese rango de semestres y se verificarían.
-    }
-    if (asignatura.prerequisitos && asignatura.prerequisitos.includes("TODOS-1-6-SEMESTRE")) { /* Similar */ }
-    if (asignatura.prerequisitos && asignatura.prerequisitos.includes("TODOS-1-8-SEMESTRE")) { /* Similar */ }
-    if (asignatura.prerequisitos && asignatura.prerequisitos.includes("TODOS-1-9-SEMESTRE")) { /* Similar */ }
-    if (asignatura.prerequisitos && asignatura.prerequisitos.includes("TODAS-DEMAS-1-10-SEMESTRE")) { /* Similar */ }
-
-
-    return todosBasicosCumplidos && todosConjuntosCumplidos;
+    return true; // Todos los prerequisitos (normales y conjuntos) están cumplidos
 }
 
-// Cargar asignaturas aprobadas al inicio (si hay)
+
+// Función para renderizar la malla y actualizar estados
+function renderizarMalla() {
+    const mallaContainer = document.getElementById('malla');
+    mallaContainer.innerHTML = ''; // Limpiar el contenedor antes de renderizar
+
+    let semestreCounter = 0; // Para el número de semestre global
+
+    for (const year in mallaCurricular) {
+        for (const semestreKey in mallaCurricular[year]) {
+            semestreCounter++;
+            // Crear el div para el semestre
+            const semestreDiv = document.createElement('div');
+            semestreDiv.classList.add('semestre');
+
+            // Crear el título del semestre (ej. "1 Semestre", "2 Semestre")
+            const semestreTitulo = document.createElement('h3');
+            // Usar solo el número del semestre
+            semestreTitulo.textContent = `${semestreKey.split(' ')[0]} Semestre`; // Toma "1" de "1 Semestre"
+            semestreDiv.appendChild(semestreTitulo);
+
+            // Añadir asignaturas a este semestre
+            mallaCurricular[year][semestreKey].forEach(asignatura => {
+                const asignaturaDiv = document.createElement('div');
+                asignaturaDiv.classList.add('asignatura');
+                asignaturaDiv.classList.add(`tipo-${asignatura.tipo}`); // Aplica la clase de tipo
+                asignaturaDiv.dataset.codigo = asignatura.codigo; // Guardar el código para referencia
+                asignaturaDiv.textContent = asignatura.nombre;
+
+                // Verificar y aplicar estado "aprobada"
+                if (estaAprobada(asignatura.codigo)) {
+                    asignaturaDiv.classList.add('aprobada');
+                } else {
+                    // Verificar y aplicar estado "desbloqueado" si no está aprobada
+                    if (prerrequisitosCumplidos(asignatura)) {
+                        asignaturaDiv.classList.add('desbloqueado');
+                        // Solo si está desbloqueada y NO aprobada, es clickeable para marcar como aprobada
+                        asignaturaDiv.addEventListener('click', () => {
+                            marcarComoAprobada(asignatura.codigo);
+                        });
+                    }
+                }
+                
+                semestreDiv.appendChild(asignaturaDiv);
+            });
+            mallaContainer.appendChild(semestreDiv);
+        }
+    }
+}
+
+// Función para marcar una asignatura como aprobada
+function marcarComoAprobada(codigoAsignatura) {
+    if (!estaAprobada(codigoAsignatura)) { // Solo si no ha sido aprobada ya
+        asignaturasAprobadas[codigoAsignatura] = true;
+        localStorage.setItem('asignaturasAprobadas', JSON.stringify(asignaturasAprobadas));
+        // Después de marcar una asignatura como aprobada, volvemos a renderizar
+        // para que los estados de otras asignaturas se actualicen (desbloqueos, etc.).
+        renderizarMalla();
+    }
+}
+
+// Función para desmarcar una asignatura (útil para depuración o si un usuario se equivoca)
+function desmarcarAsignatura(codigoAsignatura) {
+    if (estaAprobada(codigoAsignatura)) {
+        delete asignaturasAprobadas[codigoAsignatura];
+        localStorage.setItem('asignaturasAprobadas', JSON.stringify(asignaturasAprobadas));
+        renderizarMalla();
+    }
+}
+
+
+// --- Lógica de inicialización ---
 document.addEventListener('DOMContentLoaded', () => {
+    // Cargar asignaturas aprobadas al inicio (si hay)
     const savedAprobadas = localStorage.getItem('asignaturasAprobadas');
     if (savedAprobadas) {
-        Object.assign(asignaturasAprobadas, JSON.parse(savedAprobadas));
+        try {
+            Object.assign(asignaturasAprobadas, JSON.parse(savedAprobadas));
+        } catch (e) {
+            console.error("Error al cargar asignaturas aprobadas de localStorage:", e);
+            // Si hay un error, limpiar el localStorage para evitar bucles
+            localStorage.removeItem('asignaturasAprobadas');
+        }
     }
+    
+    inicializarAsignaturasYSemestres(); // Llenar los mapas antes de renderizar
     renderizarMalla();
 });
 
-// Puedes agregar un botón o algún mecanismo en el HTML para llamar a `marcarComoAprobada`
-// Por ejemplo:
-// <button onclick="marcarComoAprobada('BIMI030')">Aprobar Biología Celular</button>
+
+// Opcional: Funcionalidad para resetear el progreso (para pruebas)
+// Agrega un botón en tu HTML: <button onclick="resetearProgreso()">Resetear Progreso</button>
+function resetearProgreso() {
+    if (confirm("¿Estás seguro de que quieres resetear todo tu progreso?")) {
+        localStorage.removeItem('asignaturasAprobadas');
+        // Limpiar el objeto en memoria también
+        for (const key in asignaturasAprobadas) {
+            if (asignaturasAprobadas.hasOwnProperty(key)) {
+                delete asignaturasAprobadas[key];
+            }
+        }
+        renderizarMalla();
+        alert("Progreso reseteado.");
+    }
+}
