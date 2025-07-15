@@ -114,7 +114,14 @@ function inicializarAsignaturasYSemestres() {
     console.log("Inicializando asignaturas y semestres...");
     let globalSemestreCount = 0;
     for (const yearKey in mallaCurricular) {
-        for (const semestreKey in mallaCurricular[yearKey]) {
+        // Obtenemos las claves de los semestres para este año y las ordenamos numéricamente
+        const semestresOrdenados = Object.keys(mallaCurricular[yearKey]).sort((a, b) => {
+            const numA = parseInt(a.match(/\d+/)[0]);
+            const numB = parseInt(b.match(/\d+/)[0]);
+            return numA - numB;
+        });
+
+        for (const semestreKey of semestresOrdenados) { // Usamos el orden correcto
             globalSemestreCount++;
             semestreIndexMap.set(semestreKey, globalSemestreCount); // Mapea "1 Semestre" -> 1, "2 Semestre" -> 2
             mallaCurricular[yearKey][semestreKey].forEach(asignatura => {
@@ -214,75 +221,95 @@ function renderizarMalla() {
     const mallaContainer = document.getElementById('malla');
     mallaContainer.innerHTML = ''; // Limpiar el contenedor antes de renderizar
 
+    // Recopilar todos los semestres en un array plano
+    const allSemestres = [];
     for (const year in mallaCurricular) {
-        // ELIMINADAS las líneas para crear y añadir el yearTitle (h2)
-        // const yearTitle = document.createElement('h2');
-        // yearTitle.textContent = year;
-        // mallaContainer.appendChild(yearTitle);
+        // Ordenar los semestres dentro de cada año numéricamente
+        const semestresOrdenadosDentroDelAño = Object.keys(mallaCurricular[year]).sort((a, b) => {
+            const numA = parseInt(a.match(/\d+/)[0]);
+            const numB = parseInt(b.match(/\d+/)[0]);
+            return numA - numB;
+        });
 
-        const yearDiv = document.createElement('div');
-        yearDiv.classList.add('year-container');
+        for (const semestreKey of semestresOrdenadosDentroDelAño) {
+            allSemestres.push({
+                key: semestreKey,
+                asignaturas: mallaCurricular[year][semestreKey]
+            });
+        }
+    }
+
+    // Ordenar globalmente los semestres del 1 al 10
+    allSemestres.sort((a, b) => {
+        const numA = parseInt(a.key.match(/\d+/)[0]);
+        const numB = parseInt(b.key.match(/\d+/)[0]);
+        return numA - numB;
+    });
+
+    // Crear un contenedor único para todos los semestres
+    const globalSemestresContainer = document.createElement('div');
+    globalSemestresContainer.classList.add('global-semestres-container'); // Nueva clase para styling si es necesario
+    
+    allSemestres.forEach(semestreData => {
+        const semestreDiv = document.createElement('div');
+        semestreDiv.classList.add('semestre');
+
+        const semestreTitulo = document.createElement('h3');
+        const semestreNumberMatch = semestreData.key.match(/\d+/);
+        if (semestreNumberMatch) {
+            semestreTitulo.textContent = `${semestreNumberMatch[0]} Semestre`;
+        } else {
+            semestreTitulo.textContent = semestreData.key;
+        }
         
-        for (const semestreKey in mallaCurricular[year]) {
-            const semestreDiv = document.createElement('div');
-            semestreDiv.classList.add('semestre');
+        semestreDiv.appendChild(semestreTitulo);
 
-            const semestreTitulo = document.createElement('h3');
-            const semestreNumberMatch = semestreKey.match(/\d+/);
-            if (semestreNumberMatch) {
-                semestreTitulo.textContent = `${semestreNumberMatch[0]} Semestre`; // SOLO el número del semestre
+        semestreData.asignaturas.forEach(asignatura => {
+            const asignaturaDiv = document.createElement('div');
+            asignaturaDiv.classList.add('asignatura');
+            asignaturaDiv.classList.add(`tipo-${asignatura.tipo}`);
+            asignaturaDiv.dataset.codigo = asignatura.codigo;
+            
+            const nombreSpan = document.createElement('span');
+            nombreSpan.classList.add('asignatura-nombre');
+            nombreSpan.textContent = asignatura.nombre;
+
+            const codigoSpan = document.createElement('span');
+            codigoSpan.classList.add('asignatura-codigo');
+            codigoSpan.textContent = `${asignatura.codigo}`;
+
+            asignaturaDiv.appendChild(nombreSpan);
+            asignaturaDiv.appendChild(codigoSpan);
+
+            if (estaAprobada(asignatura.codigo)) {
+                asignaturaDiv.classList.add('aprobada');
             } else {
-                semestreTitulo.textContent = semestreKey; // Fallback si no encuentra número
+                if (prerrequisitosCumplidos(asignatura)) {
+                    asignaturaDiv.classList.add('desbloqueado');
+                }
             }
             
-            semestreDiv.appendChild(semestreTitulo);
+            asignaturaDiv.addEventListener('click', () => {
+                const clickedAsignatura = todasLasAsignaturasMap.get(asignaturaDiv.dataset.codigo);
+                if (!clickedAsignatura) return;
 
-            mallaCurricular[year][semestreKey].forEach(asignatura => {
-                const asignaturaDiv = document.createElement('div');
-                asignaturaDiv.classList.add('asignatura');
-                asignaturaDiv.classList.add(`tipo-${asignatura.tipo}`);
-                asignaturaDiv.dataset.codigo = asignatura.codigo;
-                
-                const nombreSpan = document.createElement('span');
-                nombreSpan.classList.add('asignatura-nombre');
-                nombreSpan.textContent = asignatura.nombre;
-
-                const codigoSpan = document.createElement('span');
-                codigoSpan.classList.add('asignatura-codigo');
-                codigoSpan.textContent = `${asignatura.codigo}`;
-
-                asignaturaDiv.appendChild(nombreSpan);
-                asignaturaDiv.appendChild(codigoSpan);
-
-                if (estaAprobada(asignatura.codigo)) {
-                    asignaturaDiv.classList.add('aprobada');
+                if (estaAprobada(clickedAsignatura.codigo)) {
+                    console.log(`Clic en asignatura aprobada: ${clickedAsignatura.codigo} -> Desmarcando.`);
+                    desmarcarAsignatura(clickedAsignatura.codigo);
+                } else if (prerrequisitosCumplidos(clickedAsignatura)) {
+                    console.log(`Clic en asignatura desbloqueada: ${clickedAsignatura.codigo} -> Marcando como aprobada.`);
+                    marcarComoAprobada(clickedAsignatura.codigo);
                 } else {
-                    if (prerrequisitosCumplidos(asignatura)) {
-                        asignaturaDiv.classList.add('desbloqueado');
-                    }
+                    console.log(`Asignatura ${clickedAsignatura.codigo} está bloqueada. No se puede clickear.`);
                 }
-                
-                asignaturaDiv.addEventListener('click', () => {
-                    const clickedAsignatura = todasLasAsignaturasMap.get(asignaturaDiv.dataset.codigo);
-                    if (!clickedAsignatura) return;
-
-                    if (estaAprobada(clickedAsignatura.codigo)) {
-                        console.log(`Clic en asignatura aprobada: ${clickedAsignatura.codigo} -> Desmarcando.`);
-                        desmarcarAsignatura(clickedAsignatura.codigo);
-                    } else if (prerrequisitosCumplidos(clickedAsignatura)) {
-                        console.log(`Clic en asignatura desbloqueada: ${clickedAsignatura.codigo} -> Marcando como aprobada.`);
-                        marcarComoAprobada(clickedAsignatura.codigo);
-                    } else {
-                        console.log(`Asignatura ${clickedAsignatura.codigo} está bloqueada. No se puede clickear.`);
-                    }
-                });
-                
-                semestreDiv.appendChild(asignaturaDiv);
             });
-            yearDiv.appendChild(semestreDiv);
-        }
-        mallaContainer.appendChild(yearDiv);
-    }
+            
+            semestreDiv.appendChild(asignaturaDiv);
+        });
+        globalSemestresContainer.appendChild(semestreDiv);
+    });
+    
+    mallaContainer.appendChild(globalSemestresContainer);
     console.log("Renderización de la malla finalizada.");
 }
 
