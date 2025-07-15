@@ -84,7 +84,7 @@ p {
     width: 100%; /* La asignatura ocupa el 100% del ancho de su semestre */
     box-sizing: border-box; /* Incluye padding y border en el ancho total */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Sombra suave base */
-    
+
     /* Flexbox para centrar y apilar el nombre y el código */
     display: flex;
     flex-direction: column;
@@ -100,11 +100,11 @@ p {
     pointer-events: auto; /* Permite el clic */
 }
 
-/* Estilos para ASIGNATURAS DESBLOQUEADAS (Lavanda/Morado) */
+/* Estilos para ASIGNATURAS DESBLOQUEADAS (Rojo) */
 .asignatura.desbloqueado {
-    background-color: #E39FF6; /* Lavanda base */
-    border-color: #C874E0; /* Lavanda para el borde */
-    color: #601A35; /* Texto morado oscuro */
+    background-color: #FE8484; /* Rojo base */
+    border-color: #E26A6A; /* Rojo para el borde */
+    color: #530000; /* Texto rojo oscuro */
     pointer-events: auto; /* Permite el clic */
 }
 
@@ -119,10 +119,10 @@ p {
 
 /* EFECTOS DE INTERACCIÓN (Hover y Active) */
 
-/* Efecto al pasar el ratón (hover) sobre asignaturas desbloqueadas (Morado) */
+/* Efecto al pasar el ratón (hover) sobre asignaturas desbloqueadas (Rojo) */
 .asignatura.desbloqueado:hover {
-    background-color: #C07BCC; /* Lavanda más oscura para hover */
-    border-color: #601A35; /* Borde morado oscuro para hover */
+    background-color: #E06C6C; /* Rojo más oscuro para hover */
+    border-color: #530000; /* Borde rojo muy oscuro para hover */
     transform: translateY(-3px); /* Se "levanta" un poco */
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
 }
@@ -135,10 +135,10 @@ p {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
 }
 
-/* Efecto al presionar (active) sobre asignaturas desbloqueadas (Morado) */
+/* Efecto al presionar (active) sobre asignaturas desbloqueadas (Rojo) */
 .asignatura.desbloqueado:active {
-    background-color: #601A35; /* Morado oscuro para active */
-    border-color: #3C0F22; /* Morado aún más oscuro */
+    background-color: #530000; /* Rojo muy oscuro para active */
+    border-color: #3C0000; /* Rojo aún más oscuro */
     color: #FFFFFF; /* Texto blanco para el fondo oscuro */
     transform: translateY(1px); /* Se "hunde" ligeramente */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Sombra más compacta y oscura */
@@ -178,7 +178,7 @@ p {
 }
 
 .asignatura.desbloqueado .asignatura-codigo {
-    color: #601A35; /* Morado oscuro para el código cuando desbloqueada */
+    color: #530000; /* Rojo oscuro para el código cuando desbloqueada */
 }
 
 /* Ajuste para el color del código en los estados interactivos (hover/active) */
