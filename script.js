@@ -104,7 +104,7 @@ const mallaCurricular = {
 // Objeto para llevar el registro de asignaturas aprobadas (se carga desde localStorage)
 const asignaturasAprobadas = {};
 
-// NUEVO: Objeto para llevar el registro de asignaturas aprobadas que están tachadas
+// Objeto para llevar el registro de asignaturas aprobadas que están tachadas
 const asignaturasTachadasPermanentemente = {};
 
 // Mapa para acceder rápidamente a la información de todas las asignaturas por su código
@@ -126,7 +126,10 @@ function inicializarAsignaturasYSemestres() {
 
         for (const semestreKey of semestresOrdenados) { // Usamos el orden correcto
             globalSemestreCount++;
-            semestreIndexMap.set(semestreKey, globalSemestreCount); // Mapea "1 Semestre" -> 1, "2 Semestre" -> 2
+            // Aquí se cambió el "1 Semestre" por "Primer Semestre" para el mapeo
+            const displaySemestreName = getOrdinalSemestreName(globalSemestreCount);
+            semestreIndexMap.set(semestreKey, {num: globalSemestreCount, display: displaySemestreName});
+            
             mallaCurricular[yearKey][semestreKey].forEach(asignatura => {
                 todasLasAsignaturasMap.set(asignatura.codigo, asignatura);
                 // Excluir asignaturas finales que dependen de "TODAS-DEMAS" para evitar auto-referencias
@@ -142,6 +145,17 @@ function inicializarAsignaturasYSemestres() {
     console.log("Códigos de asignaturas considerados para 'TODAS-DEMAS' (excluyendo finales/optativas):", todosLosCodigosDeAsignaturas.length);
 }
 
+// Helper para convertir número de semestre a nombre ordinal
+function getOrdinalSemestreName(num) {
+    const ordinalNames = [
+        "", // 0 no se usa
+        "Primer", "Segundo", "Tercer", "Cuarto", "Quinto",
+        "Sexto", "Séptimo", "Octavo", "Noveno", "Décimo"
+    ];
+    return ordinalNames[num] ? `${ordinalNames[num]} Semestre` : `${num} Semestre`; // Fallback si no está en la lista
+}
+
+
 // Función para obtener una asignatura por su código
 const getAsignaturaByCodigo = (codigo) => {
     return todasLasAsignaturasMap.get(codigo);
@@ -155,6 +169,7 @@ function estaAprobada(codigoAsignatura) {
 // Función para verificar si los prerrequisitos de una asignatura están cumplidos
 function prerrequisitosCumplidos(asignatura) {
     // Si la asignatura ya está aprobada, sus prerrequisitos se consideran cumplidos para efectos de habilitación
+    // (Esta línea se mantiene si el estado 'aprobada' implica que ya se pasó el prerrequisito)
     if (estaAprobada(asignatura.codigo)) {
         return true;
     }
@@ -174,8 +189,10 @@ function prerrequisitosCumplidos(asignatura) {
             let allSemestersCovered = true;
             for (const yearKey in mallaCurricular) {
                 for (const semestreKey in mallaCurricular[yearKey]) {
-                    const currentSemestreNum = semestreIndexMap.get(semestreKey);
-                    if (currentSemestreNum >= startSemestreNum && currentSemestreNum <= endSemestreNum) {
+                    const currentSemestreData = semestreIndexMap.get(semestreKey);
+                    const currentSemestreNum = currentSemestreData ? currentSemestreData.num : null;
+
+                    if (currentSemestreNum !== null && currentSemestreNum >= startSemestreNum && currentSemestreNum <= endSemestreNum) {
                         for (const s of mallaCurricular[yearKey][semestreKey]) {
                             if (!estaAprobada(s.codigo)) {
                                 allSemestersCovered = false;
@@ -258,9 +275,10 @@ function renderizarMalla() {
         semestreDiv.classList.add('semestre');
 
         const semestreTitulo = document.createElement('h3');
+        // Usar el nombre ordinal del semestre
         const semestreNumberMatch = semestreData.key.match(/\d+/);
         if (semestreNumberMatch) {
-            semestreTitulo.textContent = `${semestreNumberMatch[0]} Semestre`;
+            semestreTitulo.textContent = getOrdinalSemestreName(parseInt(semestreNumberMatch[0]));
         } else {
             semestreTitulo.textContent = semestreData.key;
         }
@@ -284,35 +302,54 @@ function renderizarMalla() {
             asignaturaDiv.appendChild(nombreSpan);
             asignaturaDiv.appendChild(codigoSpan);
 
+            // === Lógica de asignación de clases para el renderizado ===
             if (estaAprobada(asignatura.codigo)) {
                 asignaturaDiv.classList.add('aprobada');
-                // NUEVO: Si la asignatura está aprobada y debe estar tachada permanentemente
+                // Si la asignatura está aprobada Y tachada, aplica el estilo de tachado
                 if (asignaturasTachadasPermanentemente[asignatura.codigo]) {
                     asignaturaDiv.classList.add('deseleccionada-aprobada');
                 }
             } else {
+                // Si NO está aprobada, pero sus prerrequisitos están cumplidos, es 'desbloqueada'
                 if (prerrequisitosCumplidos(asignatura)) {
                     asignaturaDiv.classList.add('desbloqueado');
                 }
+                // Si no está aprobada Y sus prerrequisitos NO están cumplidos, no se añade 'aprobada' ni 'desbloqueado',
+                // por lo que permanecerá con los estilos de la clase base y la regla :not(.aprobada):not(.desbloqueado) (gris/plomo).
             }
+            // === FIN Lógica de asignación de clases ===
 
             asignaturaDiv.addEventListener('click', () => {
                 const clickedAsignatura = todasLasAsignaturasMap.get(asignaturaDiv.dataset.codigo);
                 if (!clickedAsignatura) return;
 
-                // Lógica de clic:
+                // === NUEVA LÓGICA DE CLIC ===
+                // Si la asignatura está marcada como aprobada (lo que en este flujo significa 'menta+tachado')
                 if (estaAprobada(clickedAsignatura.codigo)) {
-                    // Si ya está aprobada, ahora el clic ALTERNA el estado de tachado
-                    console.log(`Clic en asignatura aprobada: ${clickedAsignatura.codigo} -> Alternando estado tachado.`);
-                    toggleTachadoAprobada(clickedAsignatura.codigo);
-                } else if (prerrequisitosCumplidos(clickedAsignatura)) {
-                    // Si está desbloqueada, el clic la marca como aprobada
-                    console.log(`Clic en asignatura desbloqueada: ${clickedAsignatura.codigo} -> Marcando como aprobada.`);
-                    marcarComoAprobada(clickedAsignatura.codigo);
-                } else {
-                    // Si está bloqueada, no hace nada
+                    // Desaprobamos y destachamos completamente (vuelve a plomo)
+                    console.log(`Clic en asignatura aprobada y tachada: ${clickedAsignatura.codigo} -> Desaprobando y destachando.`);
+                    delete asignaturasAprobadas[clickedAsignatura.codigo];
+                    delete asignaturasTachadasPermanentemente[clickedAsignatura.codigo];
+                }
+                // Si la asignatura NO está aprobada, pero sus prerrequisitos están cumplidos (está 'desbloqueada', color 'menta')
+                else if (prerrequisitosCumplidos(clickedAsignatura)) {
+                    // La aprobamos Y la tachamos inmediatamente (primer clic = tachado)
+                    console.log(`Clic en asignatura desbloqueada: ${clickedAsignatura.codigo} -> Aprobando y tachando.`);
+                    asignaturasAprobadas[clickedAsignatura.codigo] = true;
+                    asignaturasTachadasPermanentemente[clickedAsignatura.codigo] = true;
+                }
+                // Si no está aprobada y sus prerrequisitos NO están cumplidos, no hace nada (sigue 'plomo').
+                else {
                     console.log(`Asignatura ${clickedAsignatura.codigo} está bloqueada. No se puede clickear.`);
                 }
+                
+                // Guardar el estado actual en localStorage (ambos objetos)
+                localStorage.setItem('asignaturasAprobadas', JSON.stringify(asignaturasAprobadas));
+                localStorage.setItem('asignaturasTachadasPermanentemente', JSON.stringify(asignaturasTachadasPermanentemente));
+
+                // Re-renderizar la malla para actualizar los estilos y la visibilidad
+                renderizarMalla();
+                // === FIN NUEVA LÓGICA DE CLIC ===
             });
 
             semestreDiv.appendChild(asignaturaDiv);
@@ -324,49 +361,52 @@ function renderizarMalla() {
     console.log("Renderización de la malla finalizada.");
 }
 
-// Función para marcar una asignatura como aprobada
+// Las siguientes funciones 'marcarComoAprobada', 'toggleTachadoAprobada' y 'desmarcarAsignatura'
+// ya NO son llamadas directamente desde 'clickAsignatura' con la nueva lógica.
+// Se mantienen en el código por si las necesitas para otras funcionalidades
+// o para futuras expansiones. Si no, podrías eliminarlas.
+
+// Función para marcar una asignatura como aprobada (YA NO USADA EN CLICK)
 function marcarComoAprobada(codigoAsignatura) {
     if (!estaAprobada(codigoAsignatura)) {
-        console.log(`Marcando ${codigoAsignatura} como aprobada...`);
+        console.log(`[Antiguo uso] Marcando ${codigoAsignatura} como aprobada...`);
         asignaturasAprobadas[codigoAsignatura] = true;
         localStorage.setItem('asignaturasAprobadas', JSON.stringify(asignaturasAprobadas));
         renderizarMalla();
-        console.log(`Asignatura ${codigoAsignatura} aprobada y malla re-renderizada.`);
+        console.log(`[Antiguo uso] Asignatura ${codigoAsignatura} aprobada y malla re-renderizada.`);
     }
 }
 
-// NUEVO: Función para alternar el estado "tachado" de una asignatura aprobada
+// Función para alternar el estado "tachado" de una asignatura aprobada (YA NO USADA EN CLICK)
 function toggleTachadoAprobada(codigoAsignatura) {
     if (!estaAprobada(codigoAsignatura)) {
-        console.warn(`Intento de alternar tachado en asignatura no aprobada: ${codigoAsignatura}`);
-        return; // Solo se puede tachar/destachar si ya está aprobada
+        console.warn(`[Antiguo uso] Intento de alternar tachado en asignatura no aprobada: ${codigoAsignatura}`);
+        return;
     }
 
     if (asignaturasTachadasPermanentemente[codigoAsignatura]) {
-        console.log(`Des-tachando ${codigoAsignatura}.`);
+        console.log(`[Antiguo uso] Des-tachando ${codigoAsignatura}.`);
         delete asignaturasTachadasPermanentemente[codigoAsignatura];
     } else {
-        console.log(`Tachando ${codigoAsignatura}.`);
+        console.log(`[Antiguo uso] Tachando ${codigoAsignatura}.`);
         asignaturasTachadasPermanentemente[codigoAsignatura] = true;
     }
     localStorage.setItem('asignaturasTachadasPermanentemente', JSON.stringify(asignaturasTachadasPermanentemente));
-    renderizarMalla(); // Re-renderizar para aplicar/quitar la clase CSS
+    renderizarMalla();
 }
 
-
-// Función para desmarcar una asignatura (mantenerla, aunque el clic en aprobada ya no la llama directamente)
+// Función para desmarcar una asignatura (YA NO USADA EN CLICK)
 function desmarcarAsignatura(codigoAsignatura) {
     if (estaAprobada(codigoAsignatura)) {
-        console.log(`Desmarcando ${codigoAsignatura}...`);
+        console.log(`[Antiguo uso] Desmarcando ${codigoAsignatura}...`);
         delete asignaturasAprobadas[codigoAsignatura];
-        // También remover del estado tachado si estaba tachada
         if (asignaturasTachadasPermanentemente[codigoAsignatura]) {
             delete asignaturasTachadasPermanentemente[codigoAsignatura];
             localStorage.setItem('asignaturasTachadasPermanentemente', JSON.stringify(asignaturasTachadasPermanentemente));
         }
         localStorage.setItem('asignaturasAprobadas', JSON.stringify(asignaturasAprobadas));
         renderizarMalla();
-        console.log(`Asignatura ${codigoAsignatura} desmarcada y malla re-renderizada.`);
+        console.log(`[Antiguo uso] Asignatura ${codigoAsignatura} desmarcada y malla re-renderizada.`);
     }
 }
 
@@ -387,7 +427,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // NUEVO: Cargar asignaturas tachadas permanentemente desde localStorage
+    // Cargar asignaturas tachadas permanentemente desde localStorage
     const savedTachadas = localStorage.getItem('asignaturasTachadasPermanentemente');
     if (savedTachadas) {
         try {
@@ -409,13 +449,13 @@ function resetearProgreso() {
     if (confirm("¿Estás seguro de que quieres resetear todo tu progreso?")) {
         console.log("Reseteando progreso...");
         localStorage.removeItem('asignaturasAprobadas');
-        localStorage.removeItem('asignaturasTachadasPermanentemente'); // NUEVO: también resetear el estado de tachado
+        localStorage.removeItem('asignaturasTachadasPermanentemente');
         for (const key in asignaturasAprobadas) {
             if (asignaturasAprobadas.hasOwnProperty(key)) {
                 delete asignaturasAprobadas[key];
             }
         }
-        for (const key in asignaturasTachadasPermanentemente) { // NUEVO: también limpiar el objeto de tachado
+        for (const key in asignaturasTachadasPermanentemente) {
             if (asignaturasTachadasPermanentemente.hasOwnProperty(key)) {
                 delete asignaturasTachadasPermanentemente[key];
             }
