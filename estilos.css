@@ -92,17 +92,17 @@ p {
 
 /* Estilos para el estado de las asignaturas */
 .asignatura.aprobada {
-    background-color: #a8e6a8; /* Verde para aprobadas */
-    border-color: #7bc77b;
-    color: #3a7d3a;
-    pointer-events: auto; /* Permite el clic */
+background-color: #84d684; /* Un verde más intenso para aprobadas /
+border-color: #5cb85c; / Borde más oscuro /
+color: #2e8b57; / Texto verde más oscuro */
+pointer-events: auto;
 }
 
 .asignatura.desbloqueado {
-    background-color: #c0f0c0; /* Verde más claro para desbloqueadas */
-    border-color: #9cdb9c;
-    color: #5aa55a;
-    pointer-events: auto; /* Permite el clic */
+background-color: #b3ffb3; /* Un verde mucho más claro para desbloqueadas /
+border-color: #8eff8e; / Borde más claro /
+color: #33cc33; / Texto verde más brillante */
+pointer-events: auto;
 }
 
 .asignatura:not(.aprobada):not(.desbloqueado) {
