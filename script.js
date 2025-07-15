@@ -6,7 +6,7 @@
 // 'tipo': Para aplicar diferentes estilos de color definidos en estilos.css.
 const mallaCurricular = {
     "Primer Año": {
-        "1 Semestre": [
+        "Semestre 1": [
             { codigo: "BIMI030", nombre: "BIOLOGIA CELULAR", tipo: "obligatoria" },
             { codigo: "CIAN040", nombre: "ZOOLOGIA Y ECOLOGIA APLICADA", tipo: "obligatoria" },
             { codigo: "DYRE070", nombre: "EDUCACIÓN FÍSICA Y SALUD", tipo: "obligatoria" },
@@ -15,7 +15,7 @@ const mallaCurricular = {
             { codigo: "MVET013", nombre: "PRACTICA INTRODUCCION A LA MEDICINA VETERINARIA I", tipo: "practica" },
             { codigo: "QUIM007", nombre: "QUIMICA GENERAL", tipo: "obligatoria" }
         ],
-        "2 Semestre": [
+        "Semestre 2": [
             { codigo: "ANAV051", nombre: "ANATOMIA VETERINARIA", tipo: "obligatoria" },
             { codigo: "ANAV131", nombre: "EMBRIOLOGIA VETERINARIA", tipo: "obligatoria" },
             { codigo: "ELECT13", nombre: "OFG 2", tipo: "electiva" },
@@ -25,7 +25,7 @@ const mallaCurricular = {
         ]
     },
     "Segundo Año": {
-        "3 Semestre": [
+        "Semestre 3": [
             { codigo: "ANAV140", nombre: "MORFOLOGÍA VETERINARIA APLICADA", tipo: "obligatoria", prerequisitos: ["ANAV051"] },
             { codigo: "BIMI165", nombre: "MICROBIOLOGÍA GENERAL", tipo: "obligatoria", prerequisitos: ["FARM101"] },
             { codigo: "CIAN141", nombre: "ZOOTECNIA", tipo: "obligatoria", prerequisitos: ["CIAN040"] },
@@ -33,7 +33,7 @@ const mallaCurricular = {
             { codigo: "FARM155", nombre: "INMUNOLOGÍA", tipo: "obligatoria", prerequisitos: ["BIMI030"] },
             { codigo: "MEPR132", nombre: "BIOESTADISTICA", tipo: "obligatoria", prerequisitos: ["MATM003"] }
         ],
-        "4 Semestre": [
+        "Semestre 4": [
             { codigo: "CIAN113", nombre: "ETOLOGIA Y BIENESTAR ANIMAL", tipo: "obligatoria", prerequisitos: ["CIAN141"] },
             { codigo: "CIAN161", nombre: "FISIOLOGIA REPRODUCTIVA", tipo: "obligatoria", prerequisitos: ["ANAV131", "ANAV140"] },
             { codigo: "CIDI023", nombre: "INGLES I", tipo: "obligatoria" },
@@ -43,7 +43,7 @@ const mallaCurricular = {
         ]
     },
     "Tercer Año": {
-        "5 Semestre": [
+        "Semestre 5": [
             { codigo: "CIAN243", nombre: "NUTRICIÓN Y ALIMENTACIÓN", tipo: "obligatoria", prerequisitos: ["CIAN141"] },
             { codigo: "CIAN262", nombre: "REPRODUCCION ANIMAL I", tipo: "obligatoria", prerequisitos: ["CIAN161"] },
             { codigo: "CIDI123", nombre: "INGLES II", tipo: "obligatoria", prerequisitos: ["CIDI023"] },
@@ -52,7 +52,7 @@ const mallaCurricular = {
             { codigo: "PANI238", nombre: "ENFERMEDADES PARASITARIAS", tipo: "obligatoria", prerequisitos: ["FARM202", "PANI142"] },
             { codigo: "PANI239", nombre: "PATOLOGIA ESPECIAL E INMUNOPATOLOGIA", tipo: "obligatoria", prerequisitos: ["PANI142"] }
         ],
-        "6 Semestre": [
+        "Semestre 6": [
             { codigo: "CIAN233", nombre: "REPRODUCCIÓN ANIMAL II", tipo: "obligatoria", prerequisitos: ["CIAN161"] },
             { codigo: "CIAN240", nombre: "ECONOMIA Y FUNDAMENTOS DE ADMINISTRACION PECUARIA", tipo: "obligatoria", prerequisitos: ["MEPR132"] },
             { codigo: "CIAN249", nombre: "PRODUCCIÓN DE NO RUMIANTES", tipo: "obligatoria", prerequisitos: ["CIAN243"] },
@@ -63,7 +63,7 @@ const mallaCurricular = {
         ]
     },
     "Cuarto Año": {
-        "7 Semestre": [
+        "Semestre 7 ": [
             { codigo: "CIAN244", nombre: "GENETICA PECUARIA", tipo: "obligatoria", prerequisitos: ["MEPR132", "CIAN249"] },
             { codigo: "CIAN246", nombre: "PRODUCCIÓN DE RUMIANTES I", tipo: "obligatoria", prerequisitos: ["CIAN243", "CIAN262"] },
             { codigo: "ELECT100", nombre: "OPTATIVO DE ESPECIALIZACIÓN I", tipo: "electiva", prerequisitos: ["TODOS-1-6-SEMESTRE"] },
@@ -72,7 +72,7 @@ const mallaCurricular = {
             { codigo: "HOVE278", nombre: "MEDICINA INTERNA I", tipo: "obligatoria", prerequisitos: ["FARM211", "PANI239"] },
             { codigo: "MEPR209", nombre: "PRÁCTICA TRANSFERENCIA TECNOLÓGICA Y SERVICIO VETERINARIO A LA SOCIEDAD", tipo: "practica", prerequisitos: ["PANI238", "MEPR200", "MVET102"] }
         ],
-        "8 Semestre": [
+        "Semestre 8": [
             { codigo: "CIAN235", nombre: "PRODUCTOS ANIMALES", tipo: "obligatoria", prerequisitos: ["CIAN249", "CIAN246"] },
             { codigo: "CIAN248", nombre: "PRODUCCIÓN DE RUMIANTES II", tipo: "obligatoria", prerequisitos: ["CIAN246", "CIAN240"] },
             { codigo: "ELECT101", nombre: "OPTATIVO DE ESPECIALIZACIÓN II", tipo: "electiva", prerequisitos: ["TODOS-1-7-SEMESTRE"] },
@@ -83,7 +83,7 @@ const mallaCurricular = {
         ]
     },
     "Quinto Año": {
-        "9 Semestre": [
+        "Semestre 9": [
             { codigo: "CIAN255", nombre: "FORMULACIÓN Y EVALUACIÓN DE PROYECTOS", tipo: "obligatoria", prerequisitos: ["CIAN248", "CIAN235"] },
             { codigo: "ELECT112", nombre: "OPTATIVO DE PROFUNDIZACIÓN I", tipo: "electiva", prerequisitos: ["TODOS-1-8-SEMESTRE"] },
             { codigo: "HOVE294", nombre: "CLÍNICA DE RUMIANTES", tipo: "obligatoria", prerequisitos: ["HOVE278", "HOVE292", "HOVE279", "HOVE293"] },
@@ -91,7 +91,7 @@ const mallaCurricular = {
             { codigo: "HOVE296", nombre: "CLÍNICA DE PEQUEÑOS ANIMALES", tipo: "obligatoria", prerequisitos: ["HOVE278", "HOVE292", "HOVE279", "HOVE293"] },
             { codigo: "MEPR210", nombre: "SALUD PÚBLICA VETERINARIA", tipo: "obligatoria", prerequisitos: ["MEPR216"] }
         ],
-        "10 Semestre": [
+        "Semestre 10": [
             { codigo: "ELECT116", nombre: "OPTATIVO DE PROFUNDIZACIÓN II", tipo: "electiva", prerequisitos: ["TODOS-1-9-SEMESTRE"] },
             { codigo: "HOVE297", nombre: "INTERNADO CLÍNICO", tipo: "practica", prerequisitos: ["HOVE294", "HOVE295", "HOVE296"] },
             { codigo: "MVET207", nombre: "PRACTICA PROFESIONAL DE INSPECCION VETERINARIA DE ALIMENTOS", tipo: "practica", prerequisitos: ["MEPR216"] },
@@ -103,6 +103,9 @@ const mallaCurricular = {
 
 // Objeto para llevar el registro de asignaturas aprobadas (se carga desde localStorage)
 const asignaturasAprobadas = {};
+
+// NUEVO: Objeto para llevar el registro de asignaturas aprobadas que están tachadas
+const asignaturasTachadasPermanentemente = {};
 
 // Mapa para acceder rápidamente a la información de todas las asignaturas por su código
 const todasLasAsignaturasMap = new Map();
@@ -189,19 +192,19 @@ function prerrequisitosCumplidos(asignatura) {
                 break;
             }
         } else if (prereq === "TODAS-DEMAS-1-9-SEMESTRE") {
-             let allOthersCovered = true;
-             // Se verifica que todas las asignaturas *dentro del conjunto de "todosLosCodigosDeAsignaturas"*
-             // (que ya excluye MVET208, MVET299, ELECT116, ELECT112) estén aprobadas.
-             for(const otherCodigo of todosLosCodigosDeAsignaturas) {
-                 if (!estaAprobada(otherCodigo)) {
-                     allOthersCovered = false;
-                     break;
-                 }
-             }
-             if (!allOthersCovered) {
+            let allOthersCovered = true;
+            // Se verifica que todas las asignaturas *dentro del conjunto de "todosLosCodigosDeAsignaturas"*
+            // (que ya excluye MVET208, MVET299, ELECT116, ELECT112) estén aprobadas.
+            for (const otherCodigo of todosLosCodigosDeAsignaturas) {
+                if (!estaAprobada(otherCodigo)) {
+                    allOthersCovered = false;
+                    break;
+                }
+            }
+            if (!allOthersCovered) {
                 todosCumplidos = false;
                 break;
-             }
+            }
         } else {
             // Requisito normal: debe estar aprobado
             if (!estaAprobada(prereq)) {
@@ -249,7 +252,7 @@ function renderizarMalla() {
     // Crear un contenedor único para todos los semestres
     const globalSemestresContainer = document.createElement('div');
     globalSemestresContainer.classList.add('global-semestres-container'); // Nueva clase para styling si es necesario
-    
+
     allSemestres.forEach(semestreData => {
         const semestreDiv = document.createElement('div');
         semestreDiv.classList.add('semestre');
@@ -261,7 +264,7 @@ function renderizarMalla() {
         } else {
             semestreTitulo.textContent = semestreData.key;
         }
-        
+
         semestreDiv.appendChild(semestreTitulo);
 
         semestreData.asignaturas.forEach(asignatura => {
@@ -269,7 +272,7 @@ function renderizarMalla() {
             asignaturaDiv.classList.add('asignatura');
             asignaturaDiv.classList.add(`tipo-${asignatura.tipo}`);
             asignaturaDiv.dataset.codigo = asignatura.codigo;
-            
+
             const nombreSpan = document.createElement('span');
             nombreSpan.classList.add('asignatura-nombre');
             nombreSpan.textContent = asignatura.nombre;
@@ -283,32 +286,40 @@ function renderizarMalla() {
 
             if (estaAprobada(asignatura.codigo)) {
                 asignaturaDiv.classList.add('aprobada');
+                // NUEVO: Si la asignatura está aprobada y debe estar tachada permanentemente
+                if (asignaturasTachadasPermanentemente[asignatura.codigo]) {
+                    asignaturaDiv.classList.add('deseleccionada-aprobada');
+                }
             } else {
                 if (prerrequisitosCumplidos(asignatura)) {
                     asignaturaDiv.classList.add('desbloqueado');
                 }
             }
-            
+
             asignaturaDiv.addEventListener('click', () => {
                 const clickedAsignatura = todasLasAsignaturasMap.get(asignaturaDiv.dataset.codigo);
                 if (!clickedAsignatura) return;
 
+                // Lógica de clic:
                 if (estaAprobada(clickedAsignatura.codigo)) {
-                    console.log(`Clic en asignatura aprobada: ${clickedAsignatura.codigo} -> Desmarcando.`);
-                    desmarcarAsignatura(clickedAsignatura.codigo);
+                    // Si ya está aprobada, ahora el clic ALTERNA el estado de tachado
+                    console.log(`Clic en asignatura aprobada: ${clickedAsignatura.codigo} -> Alternando estado tachado.`);
+                    toggleTachadoAprobada(clickedAsignatura.codigo);
                 } else if (prerrequisitosCumplidos(clickedAsignatura)) {
+                    // Si está desbloqueada, el clic la marca como aprobada
                     console.log(`Clic en asignatura desbloqueada: ${clickedAsignatura.codigo} -> Marcando como aprobada.`);
                     marcarComoAprobada(clickedAsignatura.codigo);
                 } else {
+                    // Si está bloqueada, no hace nada
                     console.log(`Asignatura ${clickedAsignatura.codigo} está bloqueada. No se puede clickear.`);
                 }
             });
-            
+
             semestreDiv.appendChild(asignaturaDiv);
         });
         globalSemestresContainer.appendChild(semestreDiv);
     });
-    
+
     mallaContainer.appendChild(globalSemestresContainer);
     console.log("Renderización de la malla finalizada.");
 }
@@ -324,11 +335,35 @@ function marcarComoAprobada(codigoAsignatura) {
     }
 }
 
-// Función para desmarcar una asignatura
+// NUEVO: Función para alternar el estado "tachado" de una asignatura aprobada
+function toggleTachadoAprobada(codigoAsignatura) {
+    if (!estaAprobada(codigoAsignatura)) {
+        console.warn(`Intento de alternar tachado en asignatura no aprobada: ${codigoAsignatura}`);
+        return; // Solo se puede tachar/destachar si ya está aprobada
+    }
+
+    if (asignaturasTachadasPermanentemente[codigoAsignatura]) {
+        console.log(`Des-tachando ${codigoAsignatura}.`);
+        delete asignaturasTachadasPermanentemente[codigoAsignatura];
+    } else {
+        console.log(`Tachando ${codigoAsignatura}.`);
+        asignaturasTachadasPermanentemente[codigoAsignatura] = true;
+    }
+    localStorage.setItem('asignaturasTachadasPermanentemente', JSON.stringify(asignaturasTachadasPermanentemente));
+    renderizarMalla(); // Re-renderizar para aplicar/quitar la clase CSS
+}
+
+
+// Función para desmarcar una asignatura (mantenerla, aunque el clic en aprobada ya no la llama directamente)
 function desmarcarAsignatura(codigoAsignatura) {
     if (estaAprobada(codigoAsignatura)) {
         console.log(`Desmarcando ${codigoAsignatura}...`);
         delete asignaturasAprobadas[codigoAsignatura];
+        // También remover del estado tachado si estaba tachada
+        if (asignaturasTachadasPermanentemente[codigoAsignatura]) {
+            delete asignaturasTachadasPermanentemente[codigoAsignatura];
+            localStorage.setItem('asignaturasTachadasPermanentemente', JSON.stringify(asignaturasTachadasPermanentemente));
+        }
         localStorage.setItem('asignaturasAprobadas', JSON.stringify(asignaturasAprobadas));
         renderizarMalla();
         console.log(`Asignatura ${codigoAsignatura} desmarcada y malla re-renderizada.`);
@@ -339,6 +374,8 @@ function desmarcarAsignatura(codigoAsignatura) {
 // --- Lógica de inicialización ---
 document.addEventListener('DOMContentLoaded', () => {
     console.log("DOM completamente cargado. Iniciando script.");
+
+    // Cargar asignaturas aprobadas desde localStorage
     const savedAprobadas = localStorage.getItem('asignaturasAprobadas');
     if (savedAprobadas) {
         try {
@@ -349,7 +386,19 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.removeItem('asignaturasAprobadas');
         }
     }
-    
+
+    // NUEVO: Cargar asignaturas tachadas permanentemente desde localStorage
+    const savedTachadas = localStorage.getItem('asignaturasTachadasPermanentemente');
+    if (savedTachadas) {
+        try {
+            Object.assign(asignaturasTachadasPermanentemente, JSON.parse(savedTachadas));
+            console.log("Asignaturas tachadas cargadas de localStorage:", asignaturasTachadasPermanentemente);
+        } catch (e) {
+            console.error("Error al cargar asignaturas tachadas de localStorage:", e);
+            localStorage.removeItem('asignaturasTachadasPermanentemente');
+        }
+    }
+
     inicializarAsignaturasYSemestres();
     renderizarMalla();
 });
@@ -360,9 +409,15 @@ function resetearProgreso() {
     if (confirm("¿Estás seguro de que quieres resetear todo tu progreso?")) {
         console.log("Reseteando progreso...");
         localStorage.removeItem('asignaturasAprobadas');
+        localStorage.removeItem('asignaturasTachadasPermanentemente'); // NUEVO: también resetear el estado de tachado
         for (const key in asignaturasAprobadas) {
             if (asignaturasAprobadas.hasOwnProperty(key)) {
                 delete asignaturasAprobadas[key];
+            }
+        }
+        for (const key in asignaturasTachadasPermanentemente) { // NUEVO: también limpiar el objeto de tachado
+            if (asignaturasTachadasPermanentemente.hasOwnProperty(key)) {
+                delete asignaturasTachadasPermanentemente[key];
             }
         }
         renderizarMalla();
