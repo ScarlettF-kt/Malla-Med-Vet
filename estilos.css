@@ -74,7 +74,7 @@ p {
 /* Estilos base para todas las asignaturas (sean aprobadas, desbloqueadas o bloqueadas) */
 .asignatura {
     background-color: #f0fdf0; /* Fondo muy claro por defecto */
-    border: 1px solid #d4edda; /* Borde por defecto */
+    border: 2px solid #d4edda; /* Borde por defecto (más grueso) */
     border-radius: 8px; /* Bordes redondeados */
     padding: 10px;
     margin-bottom: 8px; /* Espacio entre asignaturas */
@@ -92,19 +92,19 @@ p {
     align-items: center;
 }
 
-/* Estilos para ASIGNATURAS APROBADAS */
+/* Estilos para ASIGNATURAS APROBADAS (Menta) */
 .asignatura.aprobada {
-    background-color: #4CAF50; /* Verde brillante */
-    border-color: #388E3C; /* Borde verde oscuro */
-    color: #FFFFFF; /* Texto blanco para contraste */
+    background-color: #99DDCC; /* Menta base */
+    border-color: #80C0B0; /* Menta para el borde */
+    color: #043927; /* Texto verde muy oscuro */
     pointer-events: auto; /* Permite el clic */
 }
 
-/* Estilos para ASIGNATURAS DESBLOQUEADAS (listas para ser seleccionadas) */
+/* Estilos para ASIGNATURAS DESBLOQUEADAS (Lavanda/Morado) */
 .asignatura.desbloqueado {
-    background-color: #2196F3; /* Azul vibrante */
-    border-color: #1976D2; /* Borde azul oscuro */
-    color: #FFFFFF; /* Texto blanco para contraste */
+    background-color: #E39FF6; /* Lavanda base */
+    border-color: #C874E0; /* Lavanda para el borde */
+    color: #601A35; /* Texto morado oscuro */
     pointer-events: auto; /* Permite el clic */
 }
 
@@ -119,34 +119,38 @@ p {
 
 /* EFECTOS DE INTERACCIÓN (Hover y Active) */
 
-/* Efecto al pasar el ratón (hover) sobre asignaturas desbloqueadas (Azul) */
+/* Efecto al pasar el ratón (hover) sobre asignaturas desbloqueadas (Morado) */
 .asignatura.desbloqueado:hover {
-    background-color: #1E88E5; /* Azul ligeramente más oscuro */
+    background-color: #C07BCC; /* Lavanda más oscura para hover */
+    border-color: #601A35; /* Borde morado oscuro para hover */
     transform: translateY(-3px); /* Se "levanta" un poco */
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
 }
 
-/* Efecto al pasar el ratón (hover) sobre asignaturas aprobadas (Verde) */
+/* Efecto al pasar el ratón (hover) sobre asignaturas aprobadas (Menta) */
 .asignatura.aprobada:hover {
-    background-color: #43A047; /* Verde ligeramente más oscuro */
+    background-color: #70B99F; /* Menta más oscura para hover */
+    border-color: #043927; /* Borde verde muy oscuro para hover */
     transform: translateY(-3px); /* Se "levanta" un poco */
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
 }
 
-/* Efecto al presionar (active) sobre asignaturas desbloqueadas (Azul) */
+/* Efecto al presionar (active) sobre asignaturas desbloqueadas (Morado) */
 .asignatura.desbloqueado:active {
-    background-color: #1565C0; /* Azul más oscuro, simula un botón presionado */
+    background-color: #601A35; /* Morado oscuro para active */
+    border-color: #3C0F22; /* Morado aún más oscuro */
+    color: #FFFFFF; /* Texto blanco para el fondo oscuro */
     transform: translateY(1px); /* Se "hunde" ligeramente */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Sombra más compacta y oscura */
-    border-color: #0D47A1;
 }
 
-/* Efecto al presionar (active) sobre asignaturas aprobadas (Verde) */
+/* Efecto al presionar (active) sobre asignaturas aprobadas (Menta) */
 .asignatura.aprobada:active {
-    background-color: #388E3C; /* Verde más oscuro, simula un botón presionado */
+    background-color: #043927; /* Verde muy oscuro para active */
+    border-color: #011E15; /* Verde aún más oscuro */
+    color: #FFFFFF; /* Texto blanco para el fondo oscuro */
     transform: translateY(1px); /* Se "hunde" ligeramente */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Sombra más compacta y oscura */
-    border-color: #1B5E20;
 }
 
 /* Estilos para los nombres de las asignaturas */
@@ -162,6 +166,25 @@ p {
 .asignatura-codigo {
     display: block; /* Asegura que el código esté en su propia línea */
     font-size: 0.8em;
-    color: #EEE; /* Texto blanco para que contraste con los fondos de color */
+    color: inherit; /* Hereda el color del texto de la asignatura.
+                    Se sobrescribe en los estados :active para ser blanco. */
     text-align: center; /* Centra el texto del código */
+}
+
+/* Ajuste específico para el color del código cuando la asignatura está en estado 'aprobada' o 'desbloqueada' */
+/* Para asegurar que el código siempre sea del color oscuro para el texto del base */
+.asignatura.aprobada .asignatura-codigo {
+    color: #043927; /* Verde muy oscuro para el código cuando aprobada */
+}
+
+.asignatura.desbloqueado .asignatura-codigo {
+    color: #601A35; /* Morado oscuro para el código cuando desbloqueada */
+}
+
+/* Ajuste para el color del código en los estados interactivos (hover/active) */
+.asignatura.aprobada:hover .asignatura-codigo,
+.asignatura.desbloqueado:hover .asignatura-codigo,
+.asignatura.aprobada:active .asignatura-codigo,
+.asignatura.desbloqueado:active .asignatura-codigo {
+    color: #FFFFFF; /* Texto blanco para el código en estados hover/active oscuros */
 }
