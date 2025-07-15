@@ -100,11 +100,11 @@ p {
     pointer-events: auto; /* Permite el clic */
 }
 
-/* Estilos para ASIGNATURAS DESBLOQUEADAS (Rojo) */
+/* Estilos para ASIGNATURAS DESBLOQUEADAS (Olive/Army Green) */
 .asignatura.desbloqueado {
-    background-color: #FE8484; /* Rojo base */
-    border-color: #E26A6A; /* Rojo para el borde */
-    color: #530000; /* Texto rojo oscuro */
+    background-color: #708238; /* Olive claro base */
+    border-color: #4B5320; /* Army green para el borde */
+    color: #FFFFFF; /* Texto blanco para contraste */
     pointer-events: auto; /* Permite el clic */
 }
 
@@ -119,10 +119,10 @@ p {
 
 /* EFECTOS DE INTERACCIÓN (Hover y Active) */
 
-/* Efecto al pasar el ratón (hover) sobre asignaturas desbloqueadas (Rojo) */
+/* Efecto al pasar el ratón (hover) sobre asignaturas desbloqueadas (Olive/Army Green) */
 .asignatura.desbloqueado:hover {
-    background-color: #E06C6C; /* Rojo más oscuro para hover */
-    border-color: #530000; /* Borde rojo muy oscuro para hover */
+    background-color: #4B5320; /* Army green para hover */
+    border-color: #3B411A; /* Tono más oscuro para el borde hover */
     transform: translateY(-3px); /* Se "levanta" un poco */
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
 }
@@ -135,10 +135,10 @@ p {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
 }
 
-/* Efecto al presionar (active) sobre asignaturas desbloqueadas (Rojo) */
+/* Efecto al presionar (active) sobre asignaturas desbloqueadas (Olive/Army Green) */
 .asignatura.desbloqueado:active {
-    background-color: #530000; /* Rojo muy oscuro para active */
-    border-color: #3C0000; /* Rojo aún más oscuro */
+    background-color: #3B411A; /* Army green muy oscuro para active */
+    border-color: #2F3315; /* Tono aún más oscuro para el borde active */
     color: #FFFFFF; /* Texto blanco para el fondo oscuro */
     transform: translateY(1px); /* Se "hunde" ligeramente */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Sombra más compacta y oscura */
@@ -151,6 +151,7 @@ p {
     color: #FFFFFF; /* Texto blanco para el fondo oscuro */
     transform: translateY(1px); /* Se "hunde" ligeramente */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Sombra más compacta y oscura */
+    text-decoration: line-through; /* ¡NUEVO! Tacha el texto al presionar */
 }
 
 /* Estilos para los nombres de las asignaturas */
@@ -172,13 +173,13 @@ p {
 }
 
 /* Ajuste específico para el color del código cuando la asignatura está en estado 'aprobada' o 'desbloqueada' */
-/* Para asegurar que el código siempre sea del color oscuro para el texto del base */
+/* Para asegurar que el código siempre sea del color de texto del base */
 .asignatura.aprobada .asignatura-codigo {
     color: #043927; /* Verde muy oscuro para el código cuando aprobada */
 }
 
 .asignatura.desbloqueado .asignatura-codigo {
-    color: #530000; /* Rojo oscuro para el código cuando desbloqueada */
+    color: #FFFFFF; /* Texto blanco para el código cuando desbloqueada */
 }
 
 /* Ajuste para el color del código en los estados interactivos (hover/active) */
