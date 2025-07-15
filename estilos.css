@@ -1,9 +1,9 @@
 /* estilos.css */
 
-/* Fuentes */
+/* Importación de fuentes de Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Kalam:wght@700&family=Roboto:wght@400;700&display=swap');
 
-/* Estilos generales del cuerpo */
+/* Estilos generales del cuerpo de la página */
 body {
     font-family: 'Roboto', sans-serif;
     background-color: #f0fff0; /* Fondo general de la página */
@@ -12,16 +12,16 @@ body {
     color: #333;
 }
 
-/* Estilos para el encabezado principal */
+/* Estilos para el encabezado principal (título de la carrera) */
 h1 {
     font-family: 'Kalam', cursive;
-    color: #4CAF50;
+    color: #4CAF50; /* Color verde vibrante */
     text-align: center;
     font-size: 3em;
     margin-bottom: 10px;
 }
 
-/* Estilos para párrafos (si los usas) */
+/* Estilos para párrafos (si los usas, como descripciones) */
 p {
     font-family: 'Roboto', sans-serif;
     text-align: center;
@@ -30,133 +30,138 @@ p {
     margin-bottom: 30px;
 }
 
-/* Estilos para subtítulos (si los usas) */
+/* Estilos para subtítulos (como "Plan de Estudios" o similares) */
 .subtitulo {
     font-family: 'Kalam', cursive;
-    color: #6c8a6c;
+    color: #6c8a6c; /* Un verde más apagado */
     text-align: center;
     font-size: 2em;
     margin-top: 40px;
     margin-bottom: 20px;
 }
 
-/* Contenedor principal de la malla para organizar los semestres horizontalmente */
+/* Contenedor principal de la malla (todos los semestres) */
 #malla {
     display: flex; /* Habilita el diseño flexible para los semestres */
     flex-wrap: wrap; /* Permite que los semestres pasen a la siguiente línea si no hay espacio */
     justify-content: center; /* Centra los semestres horizontalmente */
-    gap: 20px; /* Espacio entre cada semestre */
-    padding: 20px; /* Espacio alrededor de la malla */
+    gap: 20px; /* Espacio entre cada columna de semestre */
+    padding: 20px; /* Espacio alrededor de toda la malla */
 }
 
-/* Estilos para cada semestre individual */
+/* Estilos para cada columna de semestre individual */
 .semestre {
-    background-color: #e6ffe6; /* Fondo verde claro para el semestre */
-    border: 1px solid #c8e6c9; /* Borde más oscuro */
+    background-color: #e6ffe6; /* Fondo verde claro para el recuadro del semestre */
+    border: 1px solid #c8e6c9; /* Borde suave */
     border-radius: 10px; /* Bordes redondeados */
     padding: 15px; /* Espacio interno */
     min-width: 250px; /* Ancho mínimo para cada columna de semestre */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
-    display: flex; /* Habilita flex para el contenido interno del semestre */
-    flex-direction: column; /* Apila los elementos dentro del semestre verticalmente */
-    align-items: center; /* Centra el contenido horizontalmente dentro del semestre */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave para darle profundidad */
+    display: flex; /* Habilita flex para el contenido interno del semestre (título y asignaturas) */
+    flex-direction: column; /* Apila el título y las asignaturas verticalmente */
+    align-items: center; /* Centra el contenido (título y asignaturas) horizontalmente */
 }
 
+/* Estilos para el título de cada semestre (ej. "1 Semestre") */
 .semestre h3 {
-    color: #4CAF50; /* Color del título del semestre */
+    color: #4CAF50; /* Color verde vibrante */
     margin-top: 0;
     margin-bottom: 15px;
     font-size: 1.5em;
     text-align: center;
 }
 
-/* Estilos para las asignaturas dentro de cada semestre */
+/* Estilos base para todas las asignaturas (sean aprobadas, desbloqueadas o bloqueadas) */
 .asignatura {
-    background-color: #f0fdf0; /* Fondo más claro para las asignaturas */
-    border: 1px solid #d4edda; /* Borde de la asignatura */
+    background-color: #f0fdf0; /* Fondo muy claro por defecto */
+    border: 1px solid #d4edda; /* Borde por defecto */
     border-radius: 8px; /* Bordes redondeados */
     padding: 10px;
     margin-bottom: 8px; /* Espacio entre asignaturas */
     text-align: center;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out; /* Transición suave para todos los cambios */
-    width: 100%; /* Las asignaturas ocupan el 100% del ancho del semestre */
-    box-sizing: border-box; /* Incluye padding y border en el width */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Sombra base suave */
-    /* Flexbox para centrar y apilar nombre y código */
+    cursor: pointer; /* Indica que es clickeable */
+    transition: all 0.2s ease-in-out; /* Transición suave para todos los cambios de estilo */
+    width: 100%; /* La asignatura ocupa el 100% del ancho de su semestre */
+    box-sizing: border-box; /* Incluye padding y border en el ancho total */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Sombra suave base */
+    
+    /* Flexbox para centrar y apilar el nombre y el código */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-/* Estilos para el estado de las asignaturas */
+/* Estilos para ASIGNATURAS APROBADAS */
 .asignatura.aprobada {
-background-color: #84d684; /* Un verde más intenso para aprobadas /
-border-color: #5cb85c; / Borde más oscuro /
-color: #2e8b57; / Texto verde más oscuro */
-pointer-events: auto;
+    background-color: #4CAF50; /* Verde brillante */
+    border-color: #388E3C; /* Borde verde oscuro */
+    color: #FFFFFF; /* Texto blanco para contraste */
+    pointer-events: auto; /* Permite el clic */
 }
 
+/* Estilos para ASIGNATURAS DESBLOQUEADAS (listas para ser seleccionadas) */
 .asignatura.desbloqueado {
-background-color: #b3ffb3; /* Un verde mucho más claro para desbloqueadas /
-border-color: #8eff8e; / Borde más claro /
-color: #33cc33; / Texto verde más brillante */
-pointer-events: auto;
+    background-color: #2196F3; /* Azul vibrante */
+    border-color: #1976D2; /* Borde azul oscuro */
+    color: #FFFFFF; /* Texto blanco para contraste */
+    pointer-events: auto; /* Permite el clic */
 }
 
+/* Estilos para ASIGNATURAS BLOQUEADAS (no se pueden seleccionar aún) */
 .asignatura:not(.aprobada):not(.desbloqueado) {
-    background-color: #e0e0e0; /* Gris para bloqueadas */
-    border-color: #c0c0c0;
-    color: #808080;
+    background-color: #e0e0e0; /* Gris */
+    border-color: #c0c0c0; /* Borde gris */
+    color: #808080; /* Texto gris */
     cursor: not-allowed; /* Cambia el cursor para indicar que no se puede clickear */
     opacity: 0.7; /* Ligeramente transparente */
 }
 
-/* EFECTOS DE INTERACCIÓN */
+/* EFECTOS DE INTERACCIÓN (Hover y Active) */
 
-/* Efecto hover para asignaturas desbloqueadas */
+/* Efecto al pasar el ratón (hover) sobre asignaturas desbloqueadas (Azul) */
 .asignatura.desbloqueado:hover {
-    background-color: #7bc77b; /* Un verde más oscuro y vibrante al pasar el ratón */
-    transform: translateY(-3px); /* Se "levanta" un poco más */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada y oscura */
+    background-color: #1E88E5; /* Azul ligeramente más oscuro */
+    transform: translateY(-3px); /* Se "levanta" un poco */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
 }
 
-/* Efecto hover para asignaturas aprobadas */
+/* Efecto al pasar el ratón (hover) sobre asignaturas aprobadas (Verde) */
 .asignatura.aprobada:hover {
-    background-color: #6bb06b; /* Un verde oscuro notable para aprobadas */
-    transform: translateY(-3px); /* Se "levanta" un poco más */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada y oscura */
+    background-color: #43A047; /* Verde ligeramente más oscuro */
+    transform: translateY(-3px); /* Se "levanta" un poco */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
 }
 
-/* Efecto al presionar (activo) para asignaturas desbloqueadas */
+/* Efecto al presionar (active) sobre asignaturas desbloqueadas (Azul) */
 .asignatura.desbloqueado:active {
-    background-color: #4CAF50; /* Verde principal, muy notorio al presionar */
+    background-color: #1565C0; /* Azul más oscuro, simula un botón presionado */
     transform: translateY(1px); /* Se "hunde" ligeramente */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Sombra más compacta y oscura */
-    border-color: #3a7d3a;
+    border-color: #0D47A1;
 }
 
-/* Efecto al presionar (activo) para asignaturas aprobadas */
+/* Efecto al presionar (active) sobre asignaturas aprobadas (Verde) */
 .asignatura.aprobada:active {
-    background-color: #3a7d3a; /* Un verde más oscuro al presionar */
+    background-color: #388E3C; /* Verde más oscuro, simula un botón presionado */
     transform: translateY(1px); /* Se "hunde" ligeramente */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Sombra más compacta y oscura */
-    border-color: #2b5c2b;
+    border-color: #1B5E20;
 }
 
-/* Estilos para los nombres y códigos de las asignaturas (dentro de .asignatura flex) */
+/* Estilos para los nombres de las asignaturas */
 .asignatura-nombre {
-    display: block; /* Asegura que el nombre esté en su propia línea (por si acaso, aunque flex ya ayuda) */
+    display: block; /* Asegura que el nombre esté en su propia línea */
     font-weight: bold;
-    margin-bottom: 5px; /* Pequeño espacio entre el nombre y el código */
+    margin-bottom: 5px; /* Espacio entre el nombre y el código */
     font-size: 0.95em;
     text-align: center; /* Centra el texto del nombre */
 }
 
+/* Estilos para los códigos de las asignaturas */
 .asignatura-codigo {
     display: block; /* Asegura que el código esté en su propia línea */
     font-size: 0.8em;
-    color: #666;
+    color: #EEE; /* Texto blanco para que contraste con los fondos de color */
     text-align: center; /* Centra el texto del código */
 }
