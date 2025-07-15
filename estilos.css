@@ -151,7 +151,12 @@ p {
     color: #FFFFFF; /* Texto blanco para el fondo oscuro */
     transform: translateY(1px); /* Se "hunde" ligeramente */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Sombra más compacta y oscura */
-    text-decoration: line-through; /* ¡NUEVO! Tacha el texto al presionar */
+    /* text-decoration: line-through; */ /* ¡HEMOS ELIMINADO ESTO DE AQUÍ! */
+}
+
+/* ¡NUEVA REGLA! Para tachar el texto permanentemente al hacer clic */
+.asignatura.aprobada.deseleccionada-aprobada {
+    text-decoration: line-through;
 }
 
 /* Estilos para los nombres de las asignaturas */
@@ -186,6 +191,8 @@ p {
 .asignatura.aprobada:hover .asignatura-codigo,
 .asignatura.desbloqueado:hover .asignatura-codigo,
 .asignatura.aprobada:active .asignatura-codigo,
+.asignatura.deseleccionada-aprobada:hover .asignatura-codigo, /* Añadido para mantener el color */
+.asignatura.deseleccionada-aprobada:active .asignatura-codigo, /* Añadido para mantener el color */
 .asignatura.desbloqueado:active .asignatura-codigo {
     color: #FFFFFF; /* Texto blanco para el código en estados hover/active oscuros */
 }
