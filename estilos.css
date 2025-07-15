@@ -1,186 +1,129 @@
 /* estilos.css */
 
-/* No importamos fuentes de Google Fonts, usaremos Arial/sans-serif */
+/* ... tus estilos existentes ... */
 
-:root {
-    /* Definir variables de colores verdes */
-    --color-verde-claro: #e6ffe6; /* Fondo de semestre */
-    --color-verde-medio-1: #a3e6a3; /* Bloque de asignatura (obligatoria) */
-    --color-verde-medio-2: #70db70; /* Bloque de asignatura (electiva) */
-    --color-verde-oscuro: #2e8b57; /* Bloque de asignatura (práctica/investigación) */
-    --color-texto-principal: #333;
-    --color-texto-claro: #fff;
-    --color-sombra: rgba(0, 0, 0, 0.1);
-
-    /* Nuevos colores para estados */
-    --color-aprobado: #c8e6c9; /* Verde muy claro, casi grisáceo para aprobado */
-    --color-desbloqueado: #81c784; /* Verde más brillante para asignaturas disponibles */
-    --color-bloqueado: #e0e0e0; /* Gris claro para asignaturas no disponibles */
-    --color-texto-bloqueado: #9e9e9e; /* Texto gris para bloqueado */
+/* Contenedor principal de la malla para organizar los semestres horizontalmente */
+#malla {
+    display: flex; /* Habilita el diseño flexible para los semestres */
+    flex-wrap: wrap; /* Permite que los semestres pasen a la siguiente línea si no hay espacio */
+    justify-content: center; /* Centra los semestres horizontalmente */
+    gap: 20px; /* Espacio entre cada semestre */
+    padding: 20px; /* Espacio alrededor de la malla */
 }
 
-body {
-    font-family: Arial, Helvetica, sans-serif; /* Fuente principal para el cuerpo */
-    margin: 0;
-    padding: 20px;
-    background-color: #f0fff0; /* Un fondo muy suave para la página */
-    color: var(--color-texto-principal);
-    line-height: 1.6;
+/* Estilos para cada semestre individual */
+.semestre {
+    background-color: #e6ffe6; /* Fondo verde claro para el semestre */
+    border: 1px solid #c8e6c9; /* Borde más oscuro */
+    border-radius: 10px; /* Bordes redondeados */
+    padding: 15px; /* Espacio interno */
+    min-width: 250px; /* Ancho mínimo para cada columna de semestre */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    display: flex; /* Habilita flex para el contenido interno del semestre */
+    flex-direction: column; /* Apila los elementos dentro del semestre verticalmente */
+    align-items: center; /* Centra el contenido horizontalmente dentro del semestre */
 }
 
-header {
+.semestre h3 {
+    color: #4CAF50; /* Color del título del semestre */
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.5em;
     text-align: center;
-    margin-bottom: 40px;
 }
 
+/* Estilos para las asignaturas dentro de cada semestre */
+.asignatura {
+    background-color: #f0fdf0; /* Fondo más claro para las asignaturas */
+    border: 1px solid #d4edda; /* Borde de la asignatura */
+    border-radius: 8px; /* Bordes redondeados */
+    padding: 10px;
+    margin-bottom: 8px; /* Espacio entre asignaturas */
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    width: 100%; /* Las asignaturas ocupan el 100% del ancho del semestre */
+    box-sizing: border-box; /* Incluye padding y border en el width */
+}
+
+/* Estilos para el estado de las asignaturas */
+.asignatura.aprobada {
+    background-color: #a8e6a8; /* Verde para aprobadas */
+    border-color: #7bc77b;
+    color: #3a7d3a;
+    pointer-events: auto; /* Permite el clic */
+}
+
+.asignatura.desbloqueado {
+    background-color: #c0f0c0; /* Verde más claro para desbloqueadas */
+    border-color: #9cdb9c;
+    color: #5aa55a;
+    pointer-events: auto; /* Permite el clic */
+}
+
+.asignatura:not(.aprobada):not(.desbloqueado) {
+    background-color: #e0e0e0; /* Gris para bloqueadas */
+    border-color: #c0c0c0;
+    color: #808080;
+    cursor: not-allowed; /* Cambia el cursor para indicar que no se puede clickear */
+    opacity: 0.7; /* Ligeramente transparente */
+}
+
+/* Efecto hover */
+.asignatura.desbloqueado:hover {
+    background-color: #90ee90; /* Verde más brillante al pasar el ratón */
+    transform: translateY(-2px); /* Pequeño levantamiento */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
+}
+
+.asignatura.aprobada:hover {
+    background-color: #7bc77b; /* Un poco más oscuro al pasar el ratón */
+}
+
+/* Estilos para los nombres y códigos de las asignaturas */
+.asignatura-nombre {
+    display: block; /* Asegura que el nombre esté en su propia línea */
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 0.95em;
+}
+
+.asignatura-codigo {
+    display: block; /* Asegura que el código esté en su propia línea */
+    font-size: 0.8em;
+    color: #666;
+}
+
+/* Estilos para el encabezado general */
 h1 {
-    font-family: Arial, Helvetica, sans-serif; /* Fuente para el título principal */
-    font-size: 2.8em; /* Ajusta según tu preferencia */
-    color: var(--color-verde-oscuro);
+    font-family: 'Kalam', cursive;
+    color: #4CAF50;
+    text-align: center;
+    font-size: 3em;
     margin-bottom: 10px;
 }
 
-h2 {
-    font-size: 2em;
-    color: var(--color-verde-oscuro);
+p {
+    font-family: 'Roboto', sans-serif;
     text-align: center;
+    font-size: 1.1em;
+    color: #555;
     margin-bottom: 30px;
 }
 
-/* Contenedor principal de la malla */
-#malla {
-    display: flex;
-    flex-wrap: nowrap; /* Desactiva el salto de línea para forzar el scroll horizontal */
-    justify-content: flex-start; /* Alinea los elementos al inicio */
-    gap: 1cm; /* Espaciado entre semestres */
-    padding: 10px;
-    overflow-x: auto; /* ¡Permite el desplazamiento horizontal si el contenido desborda! */
-    -webkit-overflow-scrolling: touch; /* Mejora el desplazamiento en dispositivos iOS */
-    white-space: nowrap; /* Evita que los divs de semestre salten de línea */
-}
-
-/* Estilo para cada semestre */
-.semestre {
-    background-color: var(--color-verde-claro);
-    border-radius: 15px; /* Bordes redondeados para el semestre */
-    padding: 15px;
-    box-sizing: border-box; /* Incluye padding en el ancho total */
-    display: flex;
-    flex-direction: column; /* Apila las asignaturas verticalmente */
-    align-items: center; /* Centra las asignaturas dentro del semestre */
-
-    /* Ancho máximo de 10cm, con flexibilidad */
-    max-width: 10cm;
-    min-width: 10cm; /* Asegura que cada semestre ocupe al menos 10cm */
-    flex-shrink: 0; /* Evita que los semestres se encojan si hay poco espacio */
-    flex-grow: 0; /* Evita que los semestres crezcan */
-    box-shadow: 0 4px 8px var(--color-sombra); /* Sombra suave */
-    
-    white-space: normal; /* Permite que el contenido interno del semestre salte de línea */
-}
-
-/* Título de cada semestre */
-.semestre h3 {
-    font-family: Arial, Helvetica, sans-serif; /* Fuente para el título del semestre */
-    color: var(--color-verde-oscuro);
-    margin-top: 0;
+.subtitulo {
+    font-family: 'Kalam', cursive;
+    color: #6c8a6c;
+    text-align: center;
+    font-size: 2em;
+    margin-top: 40px;
     margin-bottom: 20px;
-    text-align: center;
-    /* Tamaño que se adapta al ancho del contenedor */
-    font-size: clamp(1.2em, 4vw, 1.8em); /* Mínimo, preferido, máximo */
-    width: 100%; /* Ocupa el ancho completo del semestre */
 }
 
-/* Estilo para cada bloque de asignatura */
-.asignatura {
-    background-color: var(--color-bloqueado); /* Color inicial: bloqueado */
-    border-radius: 10px; /* Bordes redondeados para las asignaturas */
-    padding: 12px 10px;
-    margin-bottom: 12px; /* Espacio entre asignaturas */
-    text-align: center;
-    cursor: not-allowed; /* Cursor por defecto: no permitido */
-    box-shadow: 0 2px 4px var(--color-sombra);
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.3s ease; /* Transición suave para el hover y color */
-    width: calc(100% - 20px); /* Ocupa el ancho del semestre menos el padding interno */
-    max-width: 10cm; /* Asegura que no se exceda el límite */
-    min-height: 60px; /* Altura mínima para que no colapse */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-texto-bloqueado); /* Texto gris para bloqueado */
-    font-size: 0.95em;
-    font-weight: bold;
-    box-sizing: border-box; /* Incluye padding en el tamaño */
-    white-space: normal; /* Permite que el texto de la asignatura salte de línea */
-}
-
-/* Variaciones de color para asignaturas según el tipo (cuando estén desbloqueadas) */
-.asignatura.tipo-obligatoria.desbloqueado {
-    background-color: var(--color-verde-medio-1);
-    color: var(--color-texto-principal);
-}
-
-.asignatura.tipo-electiva.desbloqueado {
-    background-color: var(--color-verde-medio-2);
-    color: var(--color-texto-principal);
-}
-
-.asignatura.tipo-practica.desbloqueado {
-    background-color: var(--color-verde-oscuro);
-    color: var(--color-texto-claro);
-}
-
-/* Estado: Aprobado */
-.asignatura.aprobada {
-    background-color: var(--color-aprobado); /* Color para aprobado */
-    color: var(--color-texto-bloqueado); /* Texto más tenue para aprobado */
-    text-decoration: line-through; /* Tachado para indicar que está completado */
-    opacity: 0.8;
-    cursor: default;
-}
-
-/* Efecto al pasar el mouse por encima de la asignatura (solo si está desbloqueada y no aprobada) */
-.asignatura.desbloqueado:not(.aprobada):hover {
-    transform: scale(1.03); /* Ligeramente más grande */
-    box-shadow: 0 6px 12px var(--color-sombra); /* Sombra más pronunciada */
-    cursor: pointer; /* Cambia el cursor a una mano */
-}
-
-footer {
-    text-align: center;
-    margin-top: 50px;
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f0fff0; /* Fondo general de la página */
+    margin: 0;
     padding: 20px;
-    font-size: 0.9em;
-    color: #666;
-    border-top: 1px solid #eee;
+    color: #333;
 }
-
-/* Media Queries para Responsividad en Móviles */
-@media (max-width: 768px) {
-    /* Aquí la malla ya no se apila verticalmente, sino que se mantiene horizontalmente desplazable */
-    #malla {
-        flex-wrap: nowrap; /* Asegura que no salte de línea en pantallas pequeñas */
-        justify-content: flex-start;
-    }
-
-    .semestre {
-        /* Mantiene el ancho fijo para permitir el scroll */
-        min-width: 10cm; /* Asegura el ancho mínimo de 10cm */
-        max-width: 10cm; /* Mantiene el ancho máximo de 10cm */
-        width: 10cm; /* Fija el ancho a 10cm */
-    }
-
-    h1 {
-        font-size: 2em;
-    }
-
-    h2 {
-        font-size: 1.6em;
-    }
-
-    .asignatura {
-        font-size: 0.9em;
-    }
-}
-/* No necesitamos un media query específico para 480px para el scroll horizontal,
-   ya que el comportamiento de overflow-x ya lo maneja bien. */
