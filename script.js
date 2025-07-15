@@ -106,7 +106,7 @@ const asignaturasAprobadas = {};
 
 // Mapa para acceder rápidamente a la información de todas las asignaturas por su código
 const todasLasAsignaturasMap = new Map();
-let todosLosCodigosDeAsignaturas = []; // Para los requisitos "TODOS-X-SEMESTRE"
+let todosLosCodigosDeAsignaturas = []; // Para los requisitos "TODAS-DEMAS-X-SEMESTRE"
 let semestreIndexMap = new Map(); // Para mapear semestre a su índice global (1, 2, 3...)
 
 // Función para inicializar el mapa de asignaturas y el índice de semestres
@@ -119,8 +119,8 @@ function inicializarAsignaturasYSemestres() {
             semestreIndexMap.set(semestreKey, globalSemestreCount); // Mapea "1 Semestre" -> 1, "2 Semestre" -> 2
             mallaCurricular[yearKey][semestreKey].forEach(asignatura => {
                 todasLasAsignaturasMap.set(asignatura.codigo, asignatura);
-                // Excluir asignaturas finales y optativas que dependen de "TODAS-DEMAS" para evitar auto-referencias.
-                // Estas serán manejadas específicamente en prerrequisitosCumplidos.
+                // Excluir asignaturas finales que dependen de "TODAS-DEMAS" para evitar auto-referencias
+                // o que no deberían ser contadas en el total para ciertos prerrequisitos.
                 if (!["MVET208", "MVET299", "ELECT116", "ELECT112"].includes(asignatura.codigo)) {
                     todosLosCodigosDeAsignaturas.push(asignatura.codigo);
                 }
@@ -129,7 +129,7 @@ function inicializarAsignaturasYSemestres() {
     }
     console.log("Inicialización completa. Total de asignaturas:", todasLasAsignaturasMap.size);
     console.log("Mapa de semestres:", semestreIndexMap);
-    console.log("Códigos de asignaturas para 'TODAS-DEMAS':", todosLosCodigosDeAsignaturas.length);
+    console.log("Códigos de asignaturas considerados para 'TODAS-DEMAS' (excluyendo finales/optativas):", todosLosCodigosDeAsignaturas.length);
 }
 
 // Función para obtener una asignatura por su código
@@ -157,7 +157,7 @@ function prerrequisitosCumplidos(asignatura) {
     let todosCumplidos = true;
     for (const prereq of asignatura.prerequisitos) {
         if (prereq.startsWith("TODOS-")) {
-            const parts = prereq.split('-'); // ["TODOS", "1", "4", "SEMESTRE"]
+            const parts = prereq.split('-'); // Ej: ["TODOS", "1", "4", "SEMESTRE"]
             const startSemestreNum = parseInt(parts[1]);
             const endSemestreNum = parseInt(parts[2]);
 
@@ -183,7 +183,8 @@ function prerrequisitosCumplidos(asignatura) {
             }
         } else if (prereq === "TODAS-DEMAS-1-9-SEMESTRE") {
              let allOthersCovered = true;
-             // Iterar solo sobre los códigos que no son la asignatura actual, ni las optativas finales o proyectos
+             // Se verifica que todas las asignaturas *dentro del conjunto de "todosLosCodigosDeAsignaturas"*
+             // (que ya excluye MVET208, MVET299, ELECT116, ELECT112) estén aprobadas.
              for(const otherCodigo of todosLosCodigosDeAsignaturas) {
                  if (!estaAprobada(otherCodigo)) {
                      allOthersCovered = false;
@@ -228,12 +229,11 @@ function renderizarMalla() {
 
             // Crear el título del semestre (ej. "1 Semestre", "2 Semestre")
             const semestreTitulo = document.createElement('h3');
-            // Usar solo el número del semestre
-            const semestreNumberMatch = semestreKey.match(/\d+/); // Extrae el número
+            const semestreNumberMatch = semestreKey.match(/\d+/);
             if (semestreNumberMatch) {
                 semestreTitulo.textContent = `${semestreNumberMatch[0]} Semestre`;
             } else {
-                semestreTitulo.textContent = semestreKey; // Fallback si no encuentra número
+                semestreTitulo.textContent = semestreKey;
             }
             
             semestreDiv.appendChild(semestreTitulo);
@@ -242,8 +242,8 @@ function renderizarMalla() {
             mallaCurricular[year][semestreKey].forEach(asignatura => {
                 const asignaturaDiv = document.createElement('div');
                 asignaturaDiv.classList.add('asignatura');
-                asignaturaDiv.classList.add(`tipo-${asignatura.tipo}`); // Aplica la clase de tipo
-                asignaturaDiv.dataset.codigo = asignatura.codigo; // Guardar el código para referencia
+                asignaturaDiv.classList.add(`tipo-${asignatura.tipo}`);
+                asignaturaDiv.dataset.codigo = asignatura.codigo;
                 
                 // Mostrar nombre y código
                 const nombreSpan = document.createElement('span');
@@ -252,7 +252,7 @@ function renderizarMalla() {
 
                 const codigoSpan = document.createElement('span');
                 codigoSpan.classList.add('asignatura-codigo');
-                codigoSpan.textContent = `(${asignatura.codigo})`;
+                codigoSpan.textContent = `${asignatura.codigo}`; // Mostrar solo el código
 
                 asignaturaDiv.appendChild(nombreSpan);
                 asignaturaDiv.appendChild(codigoSpan);
@@ -285,21 +285,19 @@ function renderizarMalla() {
                 
                 semestreDiv.appendChild(asignaturaDiv);
             });
-            yearDiv.appendChild(semestreDiv); // Añadir semestre al contenedor del año
+            yearDiv.appendChild(semestreDiv);
         }
-        mallaContainer.appendChild(yearDiv); // Añadir contenedor del año a la malla principal
+        mallaContainer.appendChild(yearDiv);
     }
     console.log("Renderización de la malla finalizada.");
 }
 
 // Función para marcar una asignatura como aprobada
 function marcarComoAprobada(codigoAsignatura) {
-    if (!estaAprobada(codigoAsignatura)) { // Solo si no ha sido aprobada ya
+    if (!estaAprobada(codigoAsignatura)) {
         console.log(`Marcando ${codigoAsignatura} como aprobada...`);
         asignaturasAprobadas[codigoAsignatura] = true;
         localStorage.setItem('asignaturasAprobadas', JSON.stringify(asignaturasAprobadas));
-        // Después de marcar una asignatura como aprobada, volvemos a renderizar
-        // para que los estados de otras asignaturas se actualicen (desbloqueos, etc.).
         renderizarMalla();
         console.log(`Asignatura ${codigoAsignatura} aprobada y malla re-renderizada.`);
     }
@@ -318,10 +316,8 @@ function desmarcarAsignatura(codigoAsignatura) {
 
 
 // --- Lógica de inicialización ---
-// Asegura que el DOM esté completamente cargado antes de ejecutar el script
 document.addEventListener('DOMContentLoaded', () => {
     console.log("DOM completamente cargado. Iniciando script.");
-    // Cargar asignaturas aprobadas al inicio (si hay)
     const savedAprobadas = localStorage.getItem('asignaturasAprobadas');
     if (savedAprobadas) {
         try {
@@ -329,23 +325,20 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Asignaturas aprobadas cargadas de localStorage:", asignaturasAprobadas);
         } catch (e) {
             console.error("Error al cargar asignaturas aprobadas de localStorage:", e);
-            // Si hay un error, limpiar el localStorage para evitar bucles
             localStorage.removeItem('asignaturasAprobadas');
         }
     }
     
-    inicializarAsignaturasYSemestres(); // Llenar los mapas antes de renderizar
+    inicializarAsignaturasYSemestres();
     renderizarMalla();
 });
 
 
 // Opcional: Funcionalidad para resetear el progreso (para pruebas)
-// Agrega un botón en tu HTML: <button onclick="resetearProgreso()">Resetear Progreso</button>
 function resetearProgreso() {
     if (confirm("¿Estás seguro de que quieres resetear todo tu progreso?")) {
         console.log("Reseteando progreso...");
         localStorage.removeItem('asignaturasAprobadas');
-        // Limpiar el objeto en memoria también
         for (const key in asignaturasAprobadas) {
             if (asignaturasAprobadas.hasOwnProperty(key)) {
                 delete asignaturasAprobadas[key];
